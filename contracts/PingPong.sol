@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 // ============ External Imports ============
-import {Router} from "@abacus-network/core/contracts/router/Router.sol";
+import {Router} from "@abacus-network/app/contracts/Router.sol";
 
 /*
 ============ PingPong ============

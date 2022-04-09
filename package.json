@@ -18,13 +18,9 @@
     "coverage": "hardhat coverage"
   },
   "dependencies": {
-    "@abacus-network/core": "file:../abacus-monorepo/solidity/core",
-    "@abacus-network/sdk": "^0.0.1",
-    "@abacus-network/utils": "^0.0.7",
+    "@abacus-network/app": "^0.0.0",
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
-    "@openzeppelin/contracts": "~4.5.0",
-    "@openzeppelin/contracts-upgradeable": "~4.5.0",
     "ethers": "^5.4.7"
   },
   "devDependencies": {
