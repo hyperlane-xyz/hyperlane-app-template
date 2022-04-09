@@ -25,10 +25,9 @@
   "exclude": [
     "./node_modules/",
     "./dist/",
-    "./types/hardhat.d.ts"
+    "./src/types/hardhat.d.ts"
   ],
   "include": [
-    "./types/*.ts",
-    "./types/factories/*.ts"
+  "./src/"
   ]
 }

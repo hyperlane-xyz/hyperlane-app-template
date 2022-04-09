@@ -13,14 +13,23 @@ module.exports = {
       {
         version: '0.8.13',
       },
+      {
+        version: '0.7.6',
+        // settings: {
+        //   optimizer: {
+        //     enabled: true,
+        //     runs: 999999,
+        //   },
+        // },
+      },
     ],
   },
   gasReporter: {
     currency: 'USD',
   },
   typechain: {
-    outDir: './types',
+    outDir: './src/types',
     target: 'ethers-v5',
-    alwaysGenerateOverloads: false,
+    alwaysGenerateOverloads: false, // should overloads with full signatures like deposit(uint256) be generated always, even if there are no overloads?
   },
 };
