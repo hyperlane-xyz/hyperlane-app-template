@@ -21,7 +21,7 @@ describe('PingPong', async () => {
   });
 
   beforeEach(async () => {
-    const config = { signer }
+    const config = { signer };
     pingPong = new PingPongDeploy(config);
     await pingPong.deploy(abacus);
     router = pingPong.router(localDomain);
@@ -32,14 +32,13 @@ describe('PingPong', async () => {
     expect(await remote.received()).to.equal(0);
   });
 
-  it('deployer is the owner', async () => {
-    expect(await router.owner()).to.equal(signer.address);
-  });
-
-  it('sends initial ping', async () => {
-    await expect(router.pingRemote(remoteDomain)).to.emit(abacus.outbox(localDomain), 'Dispatch')
-    const responses = await abacus.processOutboundMessages(localDomain);
-    expect(responses.get(remoteDomain)!.length).to.equal(1);
+  it('sends an initial ping', async () => {
+    await expect(router.pingRemote(remoteDomain)).to.emit(
+      abacus.outbox(localDomain),
+      'Dispatch',
+    );
+    expect(await router.sent()).to.equal(1);
+    expect(await router.received()).to.equal(0);
   });
 
   it('responds to a ping with a pong', async () => {
@@ -54,7 +53,7 @@ describe('PingPong', async () => {
     expect(await remote.sent()).to.equal(1);
     // The initial ping has been processed.
     expect(await remote.received()).to.equal(1);
-  })
+  });
 
   it('responds to a pong with a ping', async () => {
     await router.pingRemote(remoteDomain);
@@ -70,5 +69,5 @@ describe('PingPong', async () => {
     expect(await remote.sent()).to.equal(1);
     // The initial ping has been processed.
     expect(await remote.received()).to.equal(1);
-  })
+  });
 });
