@@ -25,6 +25,7 @@
     "ethers": "^5.4.7"
   },
   "devDependencies": {
+    "@abacus-network/deploy": "^0.0.6",
     "@abacus-network/hardhat": "^0.0.17",
     "@nomiclabs/hardhat-ethers": "^2.0.1",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
