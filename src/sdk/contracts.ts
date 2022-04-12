@@ -1,14 +1,11 @@
-
 import {
-XAppConnectionManager,
+  XAppConnectionManager,
   XAppConnectionManager__factory,
 } from '@abacus-network/core';
 import { types } from '@abacus-network/utils';
 import { AbacusAppContracts } from '@abacus-network/sdk';
 
-import {
-  PingPong, PingPong__factory
-} from '../types';
+import { PingPong, PingPong__factory } from '../types';
 
 export type PingPongContractAddresses = {
   router: types.Address;
@@ -17,10 +14,7 @@ export type PingPongContractAddresses = {
 
 export class PingPongContracts extends AbacusAppContracts<PingPongContractAddresses> {
   get router(): PingPong {
-    return PingPong__factory.connect(
-      this.addresses.router,
-      this.connection,
-    );
+    return PingPong__factory.connect(this.addresses.router, this.connection);
   }
 
   get xAppConnectionManager(): XAppConnectionManager {

@@ -14,7 +14,7 @@
     "test:contracts": "hardhat test",
     "test:sdk": "",
     "test": "npm run test:contracts && npm run test:sdk",
-    "prettier": "prettier --write ./contracts ./test",
+    "prettier": "prettier --write ./contracts ./src ./test",
     "coverage": "hardhat coverage"
   },
   "dependencies": {

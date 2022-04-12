@@ -1,9 +1,9 @@
-import { ethers} from 'ethers'
+import { ethers } from 'ethers';
 import {
   AbacusApp,
   ChainName,
   domains,
-  NameOrDomain
+  NameOrDomain,
 } from '@abacus-network/sdk';
 
 import { PingPongContractAddresses, PingPongContracts } from './contracts';
@@ -12,7 +12,9 @@ export class PingPongApp extends AbacusApp<
   PingPongContractAddresses,
   PingPongContracts
 > {
-  constructor(addresses: Partial<Record<ChainName, PingPongContractAddresses>>) {
+  constructor(
+    addresses: Partial<Record<ChainName, PingPongContractAddresses>>,
+  ) {
     super();
     const chains = Object.keys(addresses) as ChainName[];
     chains.map((chain) => {
