@@ -39,20 +39,21 @@ contract PingPong is Router {
     }
 
     function _handle(
-        uint32,
+        uint32 _origin,
         bytes32,
         bytes memory _message
     ) internal override {
         received += 1;
-        (uint32 _origin, bool _isPing) = abi.decode(_message, (uint32, bool));
-        emit Received(_origin, _localDomain(), _isPing);
+        bool _isPing = abi.decode(_message, (bool));
+        uint32 localDomain = _localDomain();
+        emit Received(_origin, localDomain, _isPing);
         _send(_origin, !_isPing);
     }
 
     function _send(uint32 _destination, bool _isPing) internal {
         sent += 1;
         uint32 localDomain = _localDomain();
-        bytes memory message = abi.encode(localDomain, _isPing);
+        bytes memory message = abi.encode(_isPing);
         _dispatchToRemoteRouter(_destination, message);
         emit Sent(localDomain, _destination, _isPing);
     }
