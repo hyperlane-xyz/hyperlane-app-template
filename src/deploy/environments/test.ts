@@ -1,13 +1,14 @@
-import { DeployEnvironmnet } from '@abacus-network/deploy';
+import { EnvironmentConfig, RouterConfig } from '@abacus-network/deploy';
 
-import { configs } from '../networks/testnets';
+import { configs } from '../networks';
 
-export const test: DeployEnvironment = {
+export type PingPongConfig = EnvironmentConfig & {
+  config: RouterConfig;
+};
+
+export const environment: PingPongConfig = {
   transactionConfigs: configs,
-  domainNames: [
-    'alfajores',
-    'kovan',
-    'mumbai',
-    'fuji',
-  ],
-}
+  domains: ['alfajores', 'kovan', 'mumbai', 'fuji'],
+  // Specifying an empty RouterConfig means a xAppConnectionManager will be deployed for us.
+  config: {},
+};

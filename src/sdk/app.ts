@@ -7,20 +7,33 @@ import {
 } from '@abacus-network/sdk';
 
 import { PingPongContractAddresses, PingPongContracts } from './contracts';
+import { addresses } from './environments';
 
 export class PingPongApp extends AbacusApp<
   PingPongContractAddresses,
   PingPongContracts
 > {
   constructor(
-    addresses: Partial<Record<ChainName, PingPongContractAddresses>>,
+    addressesOrEnv:
+      | Partial<Record<ChainName, PingPongContractAddresses>>
+      | string,
   ) {
     super();
-    const chains = Object.keys(addresses) as ChainName[];
+    let _addresses: Partial<Record<ChainName, PingPongContractAddresses>> = {};
+    if (typeof addressesOrEnv == 'string') {
+      _addresses = addresses[addressesOrEnv];
+      if (!_addresses)
+        throw new Error(
+          `addresses for environment ${addressesOrEnv} not found`,
+        );
+    } else {
+      _addresses = addressesOrEnv;
+    }
+    const chains = Object.keys(_addresses) as ChainName[];
     chains.map((chain) => {
       this.registerDomain(domains[chain]);
       const domain = this.resolveDomain(chain);
-      this.contracts.set(domain, new PingPongContracts(addresses[chain]!));
+      this.contracts.set(domain, new PingPongContracts(_addresses[chain]!));
     });
   }
 

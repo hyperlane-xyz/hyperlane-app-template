@@ -5,4 +5,5 @@ coverage.json
 dist/
 node_modules/
 src/types/
+test/outputs/
 *.swp

@@ -19,7 +19,7 @@ export class PingPongDeployer extends AbacusRouterDeployer<
       domain,
       'PingPong',
       new PingPong__factory(signer),
-      [xAppConnectionManager.address],
+      xAppConnectionManager.address,
     );
 
     return {

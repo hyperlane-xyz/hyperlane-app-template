@@ -1,42 +1,24 @@
 import path from 'path';
 import '@nomiclabs/hardhat-waffle';
 import { ethers } from 'hardhat';
-import { types } from '@abacus-network/utils';
+import { utils } from '@abacus-network/deploy';
+
 import { PingPongApp } from '../src';
-
 import { PingPongDeployer, PingPongChecker } from '../src/deploy';
-
-import {
-  test,
-} from '../src/deploy/environments';
-import { registerHardhatEnvironment, RouterConfig } from '@abacus-network/deploy';
+import { environment } from '../src/deploy/environments/test';
 
 describe('deploy', async () => {
   const deployer = new PingPongDeployer();
-  const owners: Record<types.Domain, types.Address> = {};
-  let pingPong: PingPongApp;
-  let config: RouterConfig;
 
   before(async () => {
-    const [signer, owner] = await ethers.getSigners();
-    registerHardhatEnvironment(deployer, test, signer);
-
-    deployer.domainNumbers.map((domain) => {
-      owners[domain] = owner.address;
-    });
-
-    // Setting for connection manager can be anything for a test deployment.
-    if (!config.xAppConnectionManager) {
-      config.xAppConnectionManager = {};
-      deployer.domainNumbers.map((domain) => {
-        const name = deployer.mustResolveDomainName(domain);
-        config.xAppConnectionManager![name] = signer.address;
-      });
-    }
+    const [signer] = await ethers.getSigners();
+    utils.registerHardhatEnvironment(deployer, environment, signer);
+    environment.config.xAppConnectionManager =
+      utils.getTestConnectionManagers(deployer);
   });
 
   it('deploys', async () => {
-    await deployer.deploy(config);
+    await deployer.deploy(environment.config);
   });
 
   it('writes', async () => {
@@ -48,8 +30,8 @@ describe('deploy', async () => {
   it('checks', async () => {
     const app = new PingPongApp(deployer.addressesRecord);
     const [signer] = await ethers.getSigners();
-    registerHardhatEnvironment(app, test, signer);
-    const checker = new PingPongChecker(pingPong, config);
-    await checker.check(owners);
+    utils.registerHardhatEnvironment(app, environment, signer);
+    const checker = new PingPongChecker(app, environment.config);
+    await checker.check(signer.address);
   });
 });

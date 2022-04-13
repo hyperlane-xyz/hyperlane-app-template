@@ -1,25 +1,21 @@
-import { AbacusBridge, addresses } from '@abacus-network/bridge-sdk';
-import { AbacusGovernance, governanceAddresses } from '@abacus-network/sdk';
-
-import {
-  getEnvironment,
-  getBridgeConfig,
-  registerMultiProvider,
-} from './utils';
-
-import { AbacusBridgeChecker } from '../src/check';
+import path from 'path';
+import { AbacusCore } from '@abacus-network/sdk';
+import { utils } from '@abacus-network/deploy';
+import { PingPongChecker } from '../check';
+import { PingPongApp } from '../../sdk';
 
 async function check() {
-  const environment = await getEnvironment();
-  const bridge = new AbacusBridge(addresses);
-  const governance = new AbacusGovernance(governanceAddresses[environment]);
-  registerMultiProvider(bridge, environment);
-  registerMultiProvider(governance, environment);
+  const environment = await utils.getEnvironment();
+  const pingPong = new PingPongApp(environment);
+  const config = await utils.getEnvironmentConfig(
+    path.join('../environment', environment),
+  );
+  await utils.registerEnvironment(pingPong, config);
 
-  const bridgeConfig = await getBridgeConfig(environment);
-  const bridgeChecker = new AbacusBridgeChecker(bridge, bridgeConfig);
-  await bridgeChecker.check(governance.routerAddresses);
-  bridgeChecker.expectEmpty();
+  const core = new AbacusCore(environment);
+  const checker = new PingPongChecker(pingPong, utils.getRouterConfig(core));
+  await checker.check();
+  checker.expectEmpty();
 }
 
 check().then(console.log).catch(console.error);
