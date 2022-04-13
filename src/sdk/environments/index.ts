@@ -3,7 +3,7 @@ import { PingPongContractAddresses } from '../contracts';
 import { addresses as test } from './test';
 
 export const addresses: Record<
-  any,
+  string,
   Partial<Record<ChainName, PingPongContractAddresses>>
 > = {
   test,

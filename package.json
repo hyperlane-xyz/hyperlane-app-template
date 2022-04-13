@@ -8,16 +8,15 @@
     "test": "test"
   },
   "scripts": {
-    "build:contracts": "hardhat compile && hardhat typechain",
-    "build:sdk": "tsc",
-    "build": "npm run build:contracts && npm run build:sdk",
-    "test:contracts": "hardhat test",
+    "build:sol": "hardhat compile && hardhat typechain",
+    "build:ts": "tsc",
+    "build": "npm run build:sol && npm run build:ts",
+    "test:contracts": "hardhat test test/pingPong.test.ts",
     "test:sdk": "",
-    "test": "npm run test:contracts && npm run test:sdk",
+    "test:deploy": "hardhat test test/deploy.test.ts",
+    "test": "npm run test:contracts && npm run test:sdk && npm run test:deploy",
     "prettier": "prettier --write ./contracts ./src ./test",
-    "coverage": "hardhat coverage",
-    "test:deploy": "ts-node src/deploy/scripts/deploy.ts -e test",
-    "test:check": "ts-node src/deploy/scripts/check.ts -e test"
+    "coverage": "hardhat coverage"
   },
   "dependencies": {
     "@abacus-network/app": "^0.0.2",
