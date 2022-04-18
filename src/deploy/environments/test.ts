@@ -1,10 +1,5 @@
-import { EnvironmentConfig, RouterConfig } from '@abacus-network/deploy';
-
 import { configs } from '../networks';
-
-export type PingPongConfig = EnvironmentConfig & {
-  config: RouterConfig;
-};
+import { PingPongConfig } from './index';
 
 export const environment: PingPongConfig = {
   transactionConfigs: configs,

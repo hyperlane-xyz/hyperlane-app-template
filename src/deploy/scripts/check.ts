@@ -1,16 +1,17 @@
-import { AbacusCore } from '@abacus-network/sdk';
 import { utils } from '@abacus-network/deploy';
-import { PingPongChecker } from '../check';
+import { AbacusCore, coreAddresses } from '@abacus-network/sdk';
 import { PingPongApp } from '../../sdk';
+import { addresses } from '../../sdk/environments';
+import { PingPongChecker } from '../check';
 import { getEnvironmentConfig } from './utils';
 
 async function check() {
   const environment = await utils.getEnvironment();
-  const pingPong = new PingPongApp(environment);
-  const config = await getEnvironmentConfig(environment);
+  const pingPong = new PingPongApp(addresses);
+  const config = await getEnvironmentConfig(environment as any);
   await utils.registerEnvironment(pingPong, config);
 
-  const core = new AbacusCore(environment);
+  const core = new AbacusCore(coreAddresses);
   await utils.registerEnvironment(core, config);
   const checker = new PingPongChecker(pingPong, utils.getRouterConfig(core));
   const owner = await pingPong

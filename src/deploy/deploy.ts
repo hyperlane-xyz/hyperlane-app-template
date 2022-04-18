@@ -1,15 +1,16 @@
-import { types } from '@abacus-network/utils';
 import { AbacusRouterDeployer, RouterConfig } from '@abacus-network/deploy';
-import { PingPong, PingPong__factory } from '../types';
+import { ChainName } from '@abacus-network/sdk';
+import { types } from '@abacus-network/utils';
 import { PingPongContractAddresses } from '../sdk';
+import { PingPong, PingPong__factory } from '../types';
 
 export class PingPongDeployer extends AbacusRouterDeployer<
   PingPongContractAddresses,
-  RouterConfig
+  RouterConfig<ChainName>
 > {
   async deployContracts(
     domain: types.Domain,
-    config: RouterConfig,
+    config: RouterConfig<ChainName>,
   ): Promise<PingPongContractAddresses> {
     const xAppConnectionManager =
       await this.deployConnectionManagerIfNotConfigured(domain, config);
@@ -19,7 +20,7 @@ export class PingPongDeployer extends AbacusRouterDeployer<
       domain,
       'PingPong',
       new PingPong__factory(signer),
-      xAppConnectionManager.address,
+      [xAppConnectionManager.address],
     );
 
     return {

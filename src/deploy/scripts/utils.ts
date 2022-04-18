@@ -1,12 +1,7 @@
-import path from 'path';
-import { EnvironmentConfig } from '@abacus-network/deploy';
-
-export function moduleName(environment: string) {
-  return path.join('../environments/', environment);
-}
+import { environments, PingPongConfig } from '../environments';
 
 export async function getEnvironmentConfig(
-  environment: string,
-): Promise<EnvironmentConfig> {
-  return (await import(moduleName(environment))).environment;
+  environment: keyof typeof environments,
+): Promise<PingPongConfig> {
+  return environments[environment];
 }

@@ -1,5 +1,5 @@
-import { ChainName } from '@abacus-network/sdk';
 import { TransactionConfig, utils } from '@abacus-network/deploy';
+import { ChainSubsetMap } from '@abacus-network/sdk';
 
 const signer = utils.getHardhatSigner();
 
@@ -27,7 +27,16 @@ export const kovan: TransactionConfig = {
   signer,
 };
 
-export const configs: Partial<Record<ChainName, TransactionConfig>> = {
+const _configs = {
+  alfajores,
+  fuji,
+  mumbai,
+  kovan,
+};
+
+export type TemplateNetworks = keyof typeof _configs;
+
+export const configs: ChainSubsetMap<TemplateNetworks, TransactionConfig> = {
   alfajores,
   fuji,
   mumbai,
