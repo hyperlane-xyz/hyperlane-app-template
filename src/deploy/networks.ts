@@ -1,5 +1,5 @@
 import { TransactionConfig, utils } from '@abacus-network/deploy';
-import { ChainSubsetMap } from '@abacus-network/sdk';
+import { inferChainSubsetMap } from '@abacus-network/sdk';
 
 const signer = utils.getHardhatSigner();
 
@@ -27,18 +27,9 @@ export const kovan: TransactionConfig = {
   signer,
 };
 
-const _configs = {
+export const configs = inferChainSubsetMap({
   alfajores,
   fuji,
   mumbai,
   kovan,
-};
-
-export type TemplateNetworks = keyof typeof _configs;
-
-export const configs: ChainSubsetMap<TemplateNetworks, TransactionConfig> = {
-  alfajores,
-  fuji,
-  mumbai,
-  kovan,
-};
+});

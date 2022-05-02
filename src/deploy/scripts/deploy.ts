@@ -2,14 +2,15 @@ import { utils } from '@abacus-network/deploy';
 import { AbacusCore, coreAddresses } from '@abacus-network/sdk';
 import path from 'path';
 import { PingPongDeployer } from '../deploy';
-import { getEnvironmentConfig } from './utils';
+import { environments } from '../environments';
 
 async function main() {
-  const environment = await utils.getEnvironment();
+  const name = await utils.getEnvironment();
+  const environment = environments[name as keyof typeof environments];
+
   const core = new AbacusCore(coreAddresses);
   const deployer = new PingPongDeployer(core);
-  const config = await getEnvironmentConfig(environment as any);
-  await utils.registerEnvironment(core, config);
+  await utils.registerEnvironment(core, environments[environment]);
   await utils.registerEnvironment(deployer, config);
   await deployer.deploy(utils.getRouterConfig(core) as any); // TODO: fix types
 
