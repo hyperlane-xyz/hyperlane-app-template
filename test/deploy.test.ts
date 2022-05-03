@@ -3,8 +3,8 @@ import '@nomiclabs/hardhat-waffle';
 import { ethers } from 'hardhat';
 import { utils } from '@abacus-network/deploy';
 
-import { PingPongAddresses } from '../src';
-import { PingPongDeployer  } from '../src/deploy';
+import { PingPongAddresses, PingPongApp } from '../src';
+import { PingPongChecker, PingPongDeployer  } from '../src/deploy';
 import { configs } from '../src/deploy/networks';
 
 describe('deploy', async () => {
@@ -31,11 +31,16 @@ describe('deploy', async () => {
     deployer.writeContracts(addresses, path.join(base, 'contracts.ts'));
   });
 
-  // it('checks', async () => {
-  //   const app = new PingPongApp(deployer.addressesRecord);
-  //   const [signer] = await ethers.getSigners();
-  //   utils.registerHardhatEnvironment(app, environment, signer);
-  //   const checker = new PingPongChecker(app, environment.config);
-  //   await checker.check(signer.address);
-  // });
+  it('checks', async () => {
+    const transactionConfigs = {
+      test1: configs.test1,
+      test2: configs.test2,
+    };
+    const [signer] = await ethers.getSigners();
+    const multiProvider = utils.initHardhatMultiProvider({ transactionConfigs }, signer);
+    const app = new PingPongApp(addresses, multiProvider);
+    const checker = new PingPongChecker(multiProvider, app, {})
+    await checker.check({ test1: signer.address, test2: signer.address})
+    checker.expectEmpty()
+  });
 });

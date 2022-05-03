@@ -1,24 +1,26 @@
-// import { utils } from '@abacus-network/deploy';
-// import { AbacusCore, coreAddresses } from '@abacus-network/sdk';
-// import { PingPongApp } from '../../sdk';
-// import { addresses } from '../../sdk/environments';
-// import { PingPongChecker } from '../check';
-// import { getEnvironmentConfig } from './utils';
+import { utils } from '@abacus-network/deploy';
+import { ethers } from 'hardhat';
+import { PingPongApp } from '../../sdk';
+import { environments } from '../../sdk/environments';
+import { PingPongChecker } from '../check';
+import { configs } from '../networks';
 
-// async function check() {
-//   const environment = await utils.getEnvironment();
-//   const pingPong = new PingPongApp(addresses);
-//   const config = await getEnvironmentConfig(environment as any);
-//   await utils.registerEnvironment(pingPong, config);
+async function check() {
+  const transactionConfigs = {
+    alfajores: configs.alfajores,
+    kovan: configs.kovan,
+  };
+  const [signer] = await ethers.getSigners();
+  const multiProvider = utils.initHardhatMultiProvider({ transactionConfigs }, signer);
 
-//   const core = new AbacusCore(coreAddresses);
-//   await utils.registerEnvironment(core, config);
-//   const checker = new PingPongChecker(pingPong, utils.getRouterConfig(core));
-//   const owner = await pingPong
-//     .mustGetSigner(pingPong.domainNumbers[0])
-//     .getAddress();
-//   await checker.check(owner);
-//   checker.expectEmpty();
-// }
+  const app = new PingPongApp(environments.test, multiProvider)
+  const pingPongChecker = new PingPongChecker(
+    multiProvider,
+    app,
+    {}
+  );
+  await pingPongChecker.check('0x0');
+  pingPongChecker.expectEmpty();
+}
 
-// check().then(console.log).catch(console.error);
+check().then(console.log).catch(console.error);
