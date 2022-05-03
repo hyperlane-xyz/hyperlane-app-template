@@ -1,19 +1,23 @@
 import { utils } from '@abacus-network/deploy';
-import { AbacusCore, coreAddresses } from '@abacus-network/sdk';
+import "@nomiclabs/hardhat-ethers";
+import { ethers } from 'hardhat';
 import path from 'path';
-import { PingPongDeployer } from '../deploy';
-import { getEnvironmentConfig } from './utils';
+import { PingPongDeployer } from '..';
+import { configs } from '../networks';
 
 async function main() {
-  const environment = await utils.getEnvironment();
-  const core = new AbacusCore(coreAddresses);
-  const deployer = new PingPongDeployer(core);
-  const config = await getEnvironmentConfig(environment as any);
-  await utils.registerEnvironment(core, config);
-  await utils.registerEnvironment(deployer, config);
-  await deployer.deploy(utils.getRouterConfig(core) as any); // TODO: fix types
-
-  deployer.writeOutput(path.join('./src/deploy/output/', environment));
+  const transactionConfigs = {
+    alfajores: configs.alfajores,
+    kovan: configs.kovan,
+  };
+  const [signer] = await ethers.getSigners();
+  const environment = 'test';
+  const multiProvider = utils.initHardhatMultiProvider({ transactionConfigs }, signer);
+  // const core = AbacusCore.fromEnvironment('test', multiProvider);
+  
+  const deployer = new PingPongDeployer(multiProvider, {}) ;
+  const addresses = await deployer.deploy();
+  deployer.writeContracts(addresses, path.join('./src/deploy/output/', environment));
 }
 
 main().then(console.log).catch(console.error);

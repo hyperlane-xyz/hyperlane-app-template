@@ -1,6 +1,6 @@
 export {
   PingPongApp,
-  PingPongContractAddresses,
+  PingPongAddresses,
   PingPongContracts,
 } from './sdk';
 export * as contracts from './types';

@@ -1,2 +1,2 @@
 export { PingPongApp } from './app';
-export { PingPongContractAddresses, PingPongContracts } from './contracts';
+export { PingPongAddresses, PingPongContracts } from './contracts';

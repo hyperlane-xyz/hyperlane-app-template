@@ -1,26 +1,22 @@
-import {
-  XAppConnectionManager,
-  XAppConnectionManager__factory,
-} from '@abacus-network/core';
-import { types } from '@abacus-network/utils';
-import { AbacusAppContracts } from '@abacus-network/sdk';
+import { AbacusContracts, RouterAddresses, routerFactories } from '@abacus-network/sdk';
+import { PingPong__factory } from '../types';
 
-import { PingPong, PingPong__factory } from '../types';
+export type PingPongAddresses = RouterAddresses
 
-export type PingPongContractAddresses = {
-  router: types.Address;
-  xAppConnectionManager: types.Address;
+export const pingPongFactories = {
+  ...routerFactories,
+  router: PingPong__factory.connect,
 };
 
-export class PingPongContracts extends AbacusAppContracts<PingPongContractAddresses> {
-  get router(): PingPong {
-    return PingPong__factory.connect(this.addresses.router, this.connection);
-  }
+export type PingPongFactories = typeof pingPongFactories;
 
-  get xAppConnectionManager(): XAppConnectionManager {
-    return XAppConnectionManager__factory.connect(
-      this.addresses.xAppConnectionManager,
-      this.connection,
-    );
+export class PingPongContracts extends AbacusContracts<
+  PingPongAddresses,
+  PingPongFactories
+> {
+  // necessary for factories be defined in the constructor
+  factories() {
+    return pingPongFactories;
   }
+  router = this.contracts.router;
 }

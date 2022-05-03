@@ -30,8 +30,13 @@ contract PingPong is Router {
     );
 
     // ============ Constructor ============
-    constructor(address _connectionManager) {
-        __Router_initialize(_connectionManager);
+
+    constructor() {}
+
+    // ============ Initializer ============
+
+    function initialize(address _abacusConnectionManager) public initializer {
+        __Router_initialize(_abacusConnectionManager);
     }
 
     function pingRemote(uint32 _destination) external {

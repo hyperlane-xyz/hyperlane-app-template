@@ -16,8 +16,9 @@ export class PingPongDeploy extends TestRouterDeploy<PingPong, PingPongConfig> {
   ): Promise<PingPong> {
     const pingPongFactory = new PingPong__factory(this.config.signer);
     const router = await pingPongFactory.deploy(
-      abacus.xAppConnectionManager(domain).address,
+      
     );
+    await router.initialize(abacus.abacusConnectionManager(domain).address)
     await router.transferOwnership(this.config.signer.address);
     return router;
   }
