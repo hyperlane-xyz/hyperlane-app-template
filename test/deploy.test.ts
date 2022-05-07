@@ -3,22 +3,25 @@ import '@nomiclabs/hardhat-waffle';
 import { ethers } from 'hardhat';
 import { utils } from '@abacus-network/deploy';
 
-import { PingPongAddresses, PingPongApp } from '../src';
-import { PingPongChecker, PingPongDeployer  } from '../src/deploy';
+import { YoAddresses, YoApp } from '../src';
+import { YoChecker, YoDeployer  } from '../src/deploy';
 import { configs } from '../src/deploy/networks';
+import { AbacusCore } from '@abacus-network/sdk';
 
 describe('deploy', async () => {
-  let deployer: PingPongDeployer<"test1" | "test2">
-  let addresses: Record<"test1" | "test2", PingPongAddresses>
+  let deployer: YoDeployer<"test1" | "test2" | "test3">
+  let addresses: Record<"test1" | "test2" | "test3", YoAddresses>
 
   before(async () => {
     const transactionConfigs = {
       test1: configs.test1,
       test2: configs.test2,
+      test3: configs.test3,
     };
     const [signer] = await ethers.getSigners();
-    const multiProvider = utils.initHardhatMultiProvider({ transactionConfigs }, signer);
-    deployer = new PingPongDeployer(multiProvider, utils.getTestConnectionManagers(multiProvider));
+    const multiProvider = utils.getMultiProviderFromConfigAndSigner(transactionConfigs, signer);
+    const core = AbacusCore.fromEnvironment('test', multiProvider)
+    deployer = new YoDeployer(multiProvider, { owner: signer.address }, core);
   });
 
   it('deploys', async () => {
@@ -35,12 +38,13 @@ describe('deploy', async () => {
     const transactionConfigs = {
       test1: configs.test1,
       test2: configs.test2,
+      test3: configs.test3,
     };
     const [signer] = await ethers.getSigners();
-    const multiProvider = utils.initHardhatMultiProvider({ transactionConfigs }, signer);
-    const app = new PingPongApp(addresses, multiProvider);
-    const checker = new PingPongChecker(multiProvider, app, {})
-    await checker.check({ test1: signer.address, test2: signer.address})
+    const multiProvider = utils.getMultiProviderFromConfigAndSigner(transactionConfigs, signer);
+    const app = new YoApp(addresses, multiProvider);
+    const checker = new YoChecker(multiProvider, app, {test1: { owner: signer.address }, test2: { owner: signer.address }, test3: { owner: signer.address}})
+    await checker.check()
     checker.expectEmpty()
   });
 });

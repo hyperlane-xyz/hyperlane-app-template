@@ -6,38 +6,37 @@ import {
   ChainMap,
   MultiProvider,
 } from '@abacus-network/sdk';
-import { PingPongAddresses } from '../sdk/contracts';
-import { PingPongConfig } from '../sdk/types';
-import { PingPong__factory } from '../types';
+import { YoAddresses } from '../sdk/contracts';
+import { YoConfig } from '../sdk/types';
+import { Yo__factory } from '../types';
 
-export class PingPongDeployer<
+export class YoDeployer<
   Networks extends ChainName,
 > extends AbacusRouterDeployer<
   Networks,
-  PingPongConfig<Networks>,
-  PingPongAddresses
+  YoConfig,
+  YoAddresses
 > {
   constructor(
     multiProvider: MultiProvider<Networks>,
-    config: PingPongConfig<Networks>,
-    core?: AbacusCore<Networks>,
+    config: YoConfig,
+    core: AbacusCore<Networks>,
   ) {
     const networks = multiProvider.networks();
     const crossConfigMap = Object.fromEntries(
       networks.map((network) => [network, config]),
-    ) as ChainMap<Networks, PingPongConfig<Networks>>;
+    ) as ChainMap<Networks, YoConfig>;
     super(multiProvider, crossConfigMap, core);
   }
 
   async deployContracts(
     network: Networks,
-    config: PingPongConfig<Networks>,
-  ): Promise<PingPongAddresses> {
+    config: YoConfig,
+  ): Promise<YoAddresses> {
     const dc = this.multiProvider.getDomainConnection(network);
     const signer = dc.signer!;
 
-    const abacusConnectionManager =
-      await this.deployConnectionManagerIfNotConfigured(network);
+    const abacusConnectionManager = this.core?.getContracts(network).abacusConnectionManager!
 
     const upgradeBeaconController = await this.deployContract(
       network,
@@ -48,8 +47,8 @@ export class PingPongDeployer<
 
     const router = await this.deployProxiedContract(
       network,
-      'PingPong',
-      new PingPong__factory(signer),
+      'Yo',
+      new Yo__factory(signer),
       [],
       upgradeBeaconController.address,
       [abacusConnectionManager.address],
@@ -74,8 +73,8 @@ export class PingPongDeployer<
     };
   }
 
-  mustGetRouter(network: Networks, addresses: PingPongAddresses) {
-    return PingPong__factory.connect(
+  mustGetRouter(network: Networks, addresses: YoAddresses) {
+    return Yo__factory.connect(
       addresses.router.proxy,
       this.multiProvider.getDomainConnection(network).signer!,
     );

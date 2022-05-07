@@ -1,2 +1,2 @@
-export { PingPongApp } from './app';
-export { PingPongAddresses, PingPongContracts } from './contracts';
+export { YoApp } from './app';
+export { YoAddresses, YoContracts } from './contracts';

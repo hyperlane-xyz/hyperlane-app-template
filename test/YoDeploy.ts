@@ -2,28 +2,26 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { types } from '@abacus-network/utils';
 import { TestAbacusDeploy, TestRouterDeploy } from '@abacus-network/hardhat';
 
-import { PingPong__factory, PingPong } from '../src/types';
+import { Yo__factory, Yo } from '../src/types';
 
-// PingPong has no configurable variables.
-export type PingPongConfig = {
+// Yo has no configurable variables.
+export type YoConfig = {
   signer: SignerWithAddress;
 };
 
-export class PingPongDeploy extends TestRouterDeploy<PingPong, PingPongConfig> {
+export class YoDeploy extends TestRouterDeploy<Yo, YoConfig> {
   async deployInstance(
     domain: types.Domain,
     abacus: TestAbacusDeploy,
-  ): Promise<PingPong> {
-    const pingPongFactory = new PingPong__factory(this.config.signer);
-    const router = await pingPongFactory.deploy(
-      
-    );
+  ): Promise<Yo> {
+    const yoFactory = new Yo__factory(this.config.signer);
+    const router = await yoFactory.deploy();
     await router.initialize(abacus.abacusConnectionManager(domain).address)
     await router.transferOwnership(this.config.signer.address);
     return router;
   }
 
-  router(domain: types.Domain): PingPong {
+  router(domain: types.Domain): Yo {
     return this.instances[domain];
   }
 }

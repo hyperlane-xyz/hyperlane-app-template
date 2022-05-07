@@ -1,22 +1,21 @@
 import { AbacusContracts, RouterAddresses, routerFactories } from '@abacus-network/sdk';
-import { PingPong__factory } from '../types';
+import { Yo__factory } from '../types';
 
-export type PingPongAddresses = RouterAddresses
+export type YoAddresses = RouterAddresses
 
-export const pingPongFactories = {
+export const yoFactories = {
   ...routerFactories,
-  router: PingPong__factory.connect,
+  router: Yo__factory.connect,
 };
 
-export type PingPongFactories = typeof pingPongFactories;
+export type YoFactories = typeof yoFactories;
 
-export class PingPongContracts extends AbacusContracts<
-  PingPongAddresses,
-  PingPongFactories
+export class YoContracts extends AbacusContracts<
+  YoAddresses,
+  YoFactories
 > {
   // necessary for factories be defined in the constructor
   factories() {
-    return pingPongFactories;
+    return yoFactories;
   }
-  router = this.contracts.router;
 }

@@ -1,2 +1,2 @@
-export { PingPongDeployer } from './deploy';
-export { PingPongChecker } from './check';
+export { YoDeployer } from './deploy';
+export { YoChecker } from './check';

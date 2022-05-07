@@ -1,25 +1,22 @@
 import { utils } from '@abacus-network/deploy';
 import { ethers } from 'hardhat';
-import { PingPongApp } from '../../sdk';
+import { YoApp } from '../../sdk';
 import { environments } from '../../sdk/environments';
-import { PingPongChecker } from '../check';
-import { configs } from '../networks';
+import { YoChecker } from '../check';
+import { testConfigs } from '../networks';
 
 async function check() {
-  const transactionConfigs = {
-    alfajores: configs.alfajores,
-    kovan: configs.kovan,
-  };
   const [signer] = await ethers.getSigners();
-  const multiProvider = utils.initHardhatMultiProvider({ transactionConfigs }, signer);
+  const multiProvider = utils.getMultiProviderFromConfigAndSigner(testConfigs, signer);
 
-  const app = new PingPongApp(environments.test, multiProvider)
-  const pingPongChecker = new PingPongChecker(
+
+  const app = new YoApp(environments.test, multiProvider)
+  const pingPongChecker = new YoChecker(
     multiProvider,
     app,
-    {}
+    { test1: { owner: signer.address }, test2: { owner: signer.address }, test3: { owner: signer.address }}
   );
-  await pingPongChecker.check('0x0');
+  await pingPongChecker.check();
   pingPongChecker.expectEmpty();
 }
 

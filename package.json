@@ -1,17 +1,21 @@
 {
-  "name": "@abacus-network/template",
-  "version": "0.0.0",
+  "name": "@abacus-network/yo",
+  "version": "0.0.2",
   "license": "MIT OR Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "directories": {
     "test": "test"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "scripts": {
     "build:sol": "hardhat compile && hardhat typechain",
     "build:ts": "tsc",
     "build": "npm run build:sol && npm run build:ts",
-    "test:contracts": "hardhat test test/pingPong.test.ts",
+    "test:contracts": "hardhat test test/yo.test.ts",
     "test:sdk": "",
     "test:deploy": "hardhat test test/deploy.test.ts",
     "test": "npm run test:contracts && npm run test:sdk && npm run test:deploy",
@@ -19,8 +23,8 @@
     "coverage": "hardhat coverage"
   },
   "dependencies": {
-    "@abacus-network/app": "^0.0.4-sdkdev",
-    "@abacus-network/sdk": "^0.0.6-sdkdev",
+    "@abacus-network/app": "^0.1.0",
+    "@abacus-network/sdk": "^0.1.0",
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/experimental": "^5.6.0",
@@ -28,8 +32,8 @@
     "ethers": "^5.4.7"
   },
   "devDependencies": {
-    "@abacus-network/deploy": "^0.0.9-sdkdev",
-    "@abacus-network/hardhat": "^0.0.20-sdkdev",
+    "@abacus-network/deploy": "^0.1.0",
+    "@abacus-network/hardhat": "^0.1.0",
     "@nomiclabs/hardhat-ethers": "^2.0.1",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@typechain/ethers-v5": "~7.0.0",

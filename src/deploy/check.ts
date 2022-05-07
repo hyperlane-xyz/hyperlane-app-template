@@ -1,23 +1,15 @@
 import { AbacusRouterChecker } from '@abacus-network/deploy';
 import { ChainName } from '@abacus-network/sdk';
-import { types } from '@abacus-network/utils';
-import { PingPongApp } from '../sdk';
-import { PingPongConfig } from '../sdk/types';
+import { YoApp } from '../sdk';
+import { YoConfig } from '../sdk/types';
 
-export class PingPongChecker<
+export class YoChecker<
   Networks extends ChainName,
 > extends AbacusRouterChecker<
   Networks,
-  PingPongApp<Networks>,
-  PingPongConfig<Networks>
+  YoApp<Networks>,
+  YoConfig
 > {
-  async checkDomainAddresses(
-    network: Networks,
-    owner: types.Address,
-  ): Promise<void> {
-    await super.checkDomain(network, owner);
-  }
-
   mustGetRouter(network: Networks) {
     return this.app.getContracts(network).router;
   }
