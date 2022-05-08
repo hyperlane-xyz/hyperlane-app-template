@@ -1,4 +1,3 @@
-import { UpgradeBeaconController__factory } from '@abacus-network/core';
 import { AbacusRouterDeployer } from '@abacus-network/deploy';
 import {
   AbacusCore,
@@ -36,46 +35,26 @@ export class YoDeployer<
     const dc = this.multiProvider.getDomainConnection(network);
     const signer = dc.signer!;
 
-    const abacusConnectionManager = this.core?.getContracts(network).abacusConnectionManager!
-
-    const upgradeBeaconController = await this.deployContract(
-      network,
-      'UpgradeBeaconController',
-      new UpgradeBeaconController__factory(signer),
-      [],
-    );
-
-    const router = await this.deployProxiedContract(
+    const router = await this.deployContract(
       network,
       'Yo',
       new Yo__factory(signer),
       [],
-      upgradeBeaconController.address,
-      [abacusConnectionManager.address],
     );
 
-    // Only transfer ownership if a new ACM was deployed.
-    if (abacusConnectionManager.deployTransaction) {
-      await abacusConnectionManager.transferOwnership(
-        router.address,
-        dc.overrides,
-      );
-    }
-    await upgradeBeaconController.transferOwnership(
-      router.address,
-      dc.overrides,
-    );
+    const abacusConnectionManager = this.core?.getContracts(network).abacusConnectionManager!
+    const initTx = await router.initialize(abacusConnectionManager.address)
+    await initTx.wait(dc.confirmations)
 
     return {
-      router: router.addresses,
-      upgradeBeaconController: upgradeBeaconController.address,
+      router: router.address,
       abacusConnectionManager: abacusConnectionManager.address,
     };
   }
 
   mustGetRouter(network: Networks, addresses: YoAddresses) {
     return Yo__factory.connect(
-      addresses.router.proxy,
+      addresses.router,
       this.multiProvider.getDomainConnection(network).signer!,
     );
   }

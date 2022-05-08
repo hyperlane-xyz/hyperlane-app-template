@@ -15,10 +15,7 @@ contract Yo is Router {
     // ============ Events ============
     event SentYo(uint32 indexed origin, uint32 indexed destination);
 
-    event ReceivedYo(
-        uint32 indexed origin,
-        uint32 indexed destination
-    );
+    event ReceivedYo(uint32 indexed origin, uint32 indexed destination);
 
     // ============ Constructor ============
 
@@ -44,10 +41,10 @@ contract Yo is Router {
         emit ReceivedYo(_origin, localDomain);
     }
 
-    function _send(uint32 _destination) internal {
+    function _send(uint32 _destinationDomain) internal {
         sent += 1;
         uint32 localDomain = _localDomain();
-        _dispatchToRemoteRouter(_destination, "");
-        emit SentYo(localDomain, _destination);
+        _dispatchWithGasAndCheckpoint(_destinationDomain, "", 0);
+        emit SentYo(localDomain, _destinationDomain);
     }
 }

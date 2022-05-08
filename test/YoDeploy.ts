@@ -16,7 +16,7 @@ export class YoDeploy extends TestRouterDeploy<Yo, YoConfig> {
   ): Promise<Yo> {
     const yoFactory = new Yo__factory(this.config.signer);
     const router = await yoFactory.deploy();
-    await router.initialize(abacus.abacusConnectionManager(domain).address)
+    await router.initialize(abacus.abacusConnectionManager(domain).address);
     await router.transferOwnership(this.config.signer.address);
     return router;
   }
