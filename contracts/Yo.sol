@@ -25,7 +25,7 @@ contract Yo is Router {
 
     // ============ Initializer ============
 
-    function initialize(address _abacusConnectionManager) public initializer {
+    function initialize(address _abacusConnectionManager) external initializer {
         __Router_initialize(_abacusConnectionManager);
     }
 
