@@ -10,10 +10,7 @@ const remoteDomain = 2000;
 const domains = [localDomain, remoteDomain];
 
 describe('Yo', async () => {
-  let signer: SignerWithAddress,
-    router: Yo,
-    remote: Yo,
-    yo: YoDeploy;
+  let signer: SignerWithAddress, router: Yo, remote: Yo, yo: YoDeploy;
 
   before(async () => {
     [signer] = await ethers.getSigners();

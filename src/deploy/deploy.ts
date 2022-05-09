@@ -11,11 +11,7 @@ import { Yo__factory } from '../types';
 
 export class YoDeployer<
   Networks extends ChainName,
-> extends AbacusRouterDeployer<
-  Networks,
-  YoConfig,
-  YoAddresses
-> {
+> extends AbacusRouterDeployer<Networks, YoConfig, YoAddresses> {
   constructor(
     multiProvider: MultiProvider<Networks>,
     config: YoConfig,
@@ -42,9 +38,10 @@ export class YoDeployer<
       [],
     );
 
-    const abacusConnectionManager = this.core?.getContracts(network).abacusConnectionManager!
-    const initTx = await router.initialize(abacusConnectionManager.address)
-    await initTx.wait(dc.confirmations)
+    const abacusConnectionManager =
+      this.core?.getContracts(network).abacusConnectionManager!;
+    const initTx = await router.initialize(abacusConnectionManager.address);
+    await initTx.wait(dc.confirmations);
 
     return {
       router: router.address,
