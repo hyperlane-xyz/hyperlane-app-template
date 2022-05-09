@@ -38,6 +38,7 @@ describe('Yo', async () => {
       'Dispatch',
     );
     expect(await router.sent()).to.equal(1);
+    expect(await router.sentTo(remoteDomain)).to.equal(1);
     expect(await router.received()).to.equal(0);
   });
 
@@ -49,5 +50,6 @@ describe('Yo', async () => {
     expect(await router.sent()).to.equal(1);
     // The initial yo has been processed.
     expect(await remote.received()).to.equal(1);
+    expect(await remote.receivedFrom(localDomain)).to.equal(1);
   });
 });
