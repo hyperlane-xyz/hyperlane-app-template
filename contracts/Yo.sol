@@ -57,9 +57,13 @@ contract Yo is Router {
      */
     function _handle(
         uint32 _origin,
-        bytes32, // _sender
-        bytes memory // _message
+        bytes32 _sender,
+        bytes memory _message
     ) internal override {
+        // Silence compiler - treat every incoming message as a Yo.
+        _sender;
+        _message;
+
         received += 1;
         receivedFrom[_origin] += 1;
         emit ReceivedYo(_origin, _localDomain());
@@ -73,7 +77,7 @@ contract Yo is Router {
     function _send(uint32 _destinationDomain) internal {
         sent += 1;
         sentTo[_destinationDomain] += 1;
-        _dispatchWithGasAndCheckpoint(_destinationDomain, "", 0);
+        _dispatchWithGasAndCheckpoint(_destinationDomain, "", msg.value);
         emit SentYo(_localDomain(), _destinationDomain);
     }
 }
