@@ -1,17 +1,21 @@
-import { AbacusApp, ChainMap, ChainName, ChainNameToDomainId, MultiProvider } from '@abacus-network/sdk';
-import { ethers } from 'ethers';
 import {
-  YoAddresses,
-  YoContracts,
-} from './contracts';
+  AbacusApp,
+  ChainMap,
+  ChainName,
+  ChainNameToDomainId,
+  MultiProvider,
+} from '@abacus-network/sdk';
+import { ethers } from 'ethers';
+import { YoAddresses, YoContracts } from './contracts';
 import { environments } from './environments';
 
 type Environments = typeof environments;
 type EnvironmentName = keyof Environments;
 
-export class YoApp<
-  Networks extends ChainName = ChainName,
-> extends AbacusApp<YoContracts, Networks> {
+export class YoApp<Networks extends ChainName = ChainName> extends AbacusApp<
+  YoContracts,
+  Networks
+> {
   constructor(
     networkAddresses: ChainMap<Networks, YoAddresses>,
     multiProvider: MultiProvider<Networks>,

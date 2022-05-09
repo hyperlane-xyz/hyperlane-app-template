@@ -4,13 +4,13 @@ import { ethers } from 'hardhat';
 import { utils } from '@abacus-network/deploy';
 
 import { YoAddresses, YoApp } from '../src';
-import { YoChecker, YoDeployer  } from '../src/deploy';
+import { YoChecker, YoDeployer } from '../src/deploy';
 import { configs } from '../src/deploy/networks';
 import { AbacusCore } from '@abacus-network/sdk';
 
 describe('deploy', async () => {
-  let deployer: YoDeployer<"test1" | "test2" | "test3">
-  let addresses: Record<"test1" | "test2" | "test3", YoAddresses>
+  let deployer: YoDeployer<'test1' | 'test2' | 'test3'>;
+  let addresses: Record<'test1' | 'test2' | 'test3', YoAddresses>;
 
   before(async () => {
     const transactionConfigs = {
@@ -19,8 +19,11 @@ describe('deploy', async () => {
       test3: configs.test3,
     };
     const [signer] = await ethers.getSigners();
-    const multiProvider = utils.getMultiProviderFromConfigAndSigner(transactionConfigs, signer);
-    const core = AbacusCore.fromEnvironment('test', multiProvider)
+    const multiProvider = utils.getMultiProviderFromConfigAndSigner(
+      transactionConfigs,
+      signer,
+    );
+    const core = AbacusCore.fromEnvironment('test', multiProvider);
     deployer = new YoDeployer(multiProvider, { owner: signer.address }, core);
   });
 
@@ -41,10 +44,17 @@ describe('deploy', async () => {
       test3: configs.test3,
     };
     const [signer] = await ethers.getSigners();
-    const multiProvider = utils.getMultiProviderFromConfigAndSigner(transactionConfigs, signer);
+    const multiProvider = utils.getMultiProviderFromConfigAndSigner(
+      transactionConfigs,
+      signer,
+    );
     const app = new YoApp(addresses, multiProvider);
-    const checker = new YoChecker(multiProvider, app, {test1: { owner: signer.address }, test2: { owner: signer.address }, test3: { owner: signer.address}})
-    await checker.check()
-    checker.expectEmpty()
+    const checker = new YoChecker(multiProvider, app, {
+      test1: { owner: signer.address },
+      test2: { owner: signer.address },
+      test3: { owner: signer.address },
+    });
+    await checker.check();
+    checker.expectEmpty();
   });
 });
