@@ -11,7 +11,7 @@ The HelloWorld app
 contract HelloWorld is Router {
     // A counter of how many messages have been sent from this contract.
     uint256 public sent;
-    // A counter of how many message have been received by this contract.
+    // A counter of how many messages have been received by this contract.
     uint256 public received;
 
     // Keyed by domain, a counter of how many messages that have been sent
@@ -51,11 +51,18 @@ contract HelloWorld is Router {
      * used as interchain gas payment.
      * @param _destinationDomain The destination domain to send the message to.
      */
-    function sendHelloWorld(uint32 _destinationDomain, string calldata message)
+    function sendHelloWorld(uint32 _destinationDomain, string calldata _message)
         external
         payable
     {
-        _send(_destinationDomain, message);
+        sent += 1;
+        sentTo[_destinationDomain] += 1;
+        _dispatchWithGasAndCheckpoint(
+            _destinationDomain,
+            bytes(_message),
+            msg.value
+        );
+        emit SentHelloWorld(_localDomain(), _destinationDomain, _message);
     }
 
     // ============ Internal functions ============
@@ -80,22 +87,5 @@ contract HelloWorld is Router {
             _sender,
             string(_message)
         );
-    }
-
-    /**
-     * @notice Sends a message to the _destinationDomain. Any msg.value is
-     * used as interchain gas payment.
-     * @param _destinationDomain The destination domain to send the to.
-     * @param _message The message body.
-     */
-    function _send(uint32 _destinationDomain, string memory _message) internal {
-        sent += 1;
-        sentTo[_destinationDomain] += 1;
-        _dispatchWithGasAndCheckpoint(
-            _destinationDomain,
-            bytes(_message),
-            msg.value
-        );
-        emit SentHelloWorld(_localDomain(), _destinationDomain, _message);
     }
 }
