@@ -1,7 +1,7 @@
-import { environments, PingPongConfig } from '../environments';
+import { environments, YoConfig } from '../environments';
 
 export async function getEnvironmentConfig(
   environment: keyof typeof environments,
-): Promise<PingPongConfig> {
+): Promise<YoConfig> {
   return environments[environment];
 }

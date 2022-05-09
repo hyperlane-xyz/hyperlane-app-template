@@ -1,7 +1,7 @@
 import { configs } from '../networks';
-import { PingPongConfig } from './index';
+import { YoConfig } from './index';
 
-export const environment: PingPongConfig = {
+export const environment: YoConfig = {
   ...configs,
   config: {},
 };
