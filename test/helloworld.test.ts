@@ -2,16 +2,19 @@ import { ethers, abacus } from 'hardhat';
 import { expect } from 'chai';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
-import { YoDeploy } from './YoDeploy';
-import { Yo } from '../src/types';
+import { HelloWorldDeploy } from './HelloWorldDeploy';
+import { HelloWorld } from '../src/types';
 import { BigNumber } from 'ethers';
 
 const localDomain = 1000;
 const remoteDomain = 2000;
 const domains = [localDomain, remoteDomain];
 
-describe('Yo', async () => {
-  let signer: SignerWithAddress, router: Yo, remote: Yo, yo: YoDeploy;
+describe('HelloWorld', async () => {
+  let signer: SignerWithAddress,
+    router: HelloWorld,
+    remote: HelloWorld,
+    yo: HelloWorldDeploy;
 
   before(async () => {
     [signer] = await ethers.getSigners();
@@ -20,7 +23,7 @@ describe('Yo', async () => {
 
   beforeEach(async () => {
     const config = { signer };
-    yo = new YoDeploy(config);
+    yo = new HelloWorldDeploy(config);
     await yo.deploy(abacus);
     router = yo.router(localDomain);
     remote = yo.router(remoteDomain);
@@ -30,8 +33,8 @@ describe('Yo', async () => {
     expect(await remote.received()).to.equal(0);
   });
 
-  it('sends an initial yo', async () => {
-    await expect(router.yoRemote(remoteDomain)).to.emit(
+  it('sends a message', async () => {
+    await expect(router.sendHelloWorld(remoteDomain, 'Hello')).to.emit(
       abacus.outbox(localDomain),
       'Dispatch',
     );
@@ -43,14 +46,14 @@ describe('Yo', async () => {
   it('pays interchain gas', async () => {
     const gasPayment = BigNumber.from('1000');
     await expect(
-      router.yoRemote(remoteDomain, {
+      router.sendHelloWorld(remoteDomain, 'World', {
         value: gasPayment,
       }),
     ).to.emit(abacus.interchainGasPaymaster(localDomain), 'GasPayment');
   });
 
-  it('handles a yo', async () => {
-    await router.yoRemote(remoteDomain);
+  it('handles a message', async () => {
+    await router.sendHelloWorld(remoteDomain, 'World');
     // Processing the initial yo causes a pong to be dispatched from the remote domain.
     await abacus.processOutboundMessages(localDomain);
     // The initial yo has been dispatched.
