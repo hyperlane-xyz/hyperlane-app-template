@@ -32,7 +32,7 @@ describe('deploy', async () => {
   });
 
   it('writes', async () => {
-    const base = './test/outputs/pingPong';
+    const base = './test/outputs/yo';
     deployer.writeVerification(path.join(base, 'verification'));
     deployer.writeContracts(addresses, path.join(base, 'contracts.ts'));
   });
