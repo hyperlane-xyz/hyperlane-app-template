@@ -5,9 +5,9 @@ pragma solidity ^0.8.13;
 import {Router} from "@abacus-network/app/contracts/Router.sol";
 
 /*
-============ HelloWorld ============
-The HelloWorld app
-*/
+ * @title The Hello World App
+ * @dev You can use this simple app as a starting point for your own application.
+ */
 contract HelloWorld is Router {
     // A counter of how many messages have been sent from this contract.
     uint256 public sent;

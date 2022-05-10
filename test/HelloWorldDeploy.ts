@@ -17,8 +17,8 @@ export class HelloWorldDeploy extends TestRouterDeploy<
     domain: types.Domain,
     abacus: TestAbacusDeploy,
   ): Promise<HelloWorld> {
-    const yoFactory = new HelloWorld__factory(this.config.signer);
-    const router = await yoFactory.deploy();
+    const helloWorldFactory = new HelloWorld__factory(this.config.signer);
+    const router = await helloWorldFactory.deploy();
     await router.initialize(abacus.abacusConnectionManager(domain).address);
     await router.transferOwnership(this.config.signer.address);
     return router;

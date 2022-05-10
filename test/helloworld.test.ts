@@ -14,7 +14,7 @@ describe('HelloWorld', async () => {
   let signer: SignerWithAddress,
     router: HelloWorld,
     remote: HelloWorld,
-    yo: HelloWorldDeploy;
+    helloWorld: HelloWorldDeploy;
 
   before(async () => {
     [signer] = await ethers.getSigners();
@@ -23,10 +23,10 @@ describe('HelloWorld', async () => {
 
   beforeEach(async () => {
     const config = { signer };
-    yo = new HelloWorldDeploy(config);
-    await yo.deploy(abacus);
-    router = yo.router(localDomain);
-    remote = yo.router(remoteDomain);
+    helloWorld = new HelloWorldDeploy(config);
+    await helloWorld.deploy(abacus);
+    router = helloWorld.router(localDomain);
+    remote = helloWorld.router(remoteDomain);
     expect(await router.sent()).to.equal(0);
     expect(await router.received()).to.equal(0);
     expect(await remote.sent()).to.equal(0);
@@ -54,11 +54,11 @@ describe('HelloWorld', async () => {
 
   it('handles a message', async () => {
     await router.sendHelloWorld(remoteDomain, 'World');
-    // Processing the initial yo causes a pong to be dispatched from the remote domain.
+    // Mock processing of the message by Abacus
     await abacus.processOutboundMessages(localDomain);
-    // The initial yo has been dispatched.
+    // The initial message has been dispatched.
     expect(await router.sent()).to.equal(1);
-    // The initial yo has been processed.
+    // The initial message has been processed.
     expect(await remote.received()).to.equal(1);
     expect(await remote.receivedFrom(localDomain)).to.equal(1);
   });

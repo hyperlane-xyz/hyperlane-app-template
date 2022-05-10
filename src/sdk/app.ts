@@ -69,7 +69,8 @@ export class HelloWorldApp<
       await this.interchainGasCalculator.estimatePaymentForHandleGasAmount(
         fromDomain,
         toDomain,
-        BigNumber.from('10000'),
+        // Actual gas costs depend on the size of the message
+        BigNumber.from('100000'),
       );
     const tx = await router.sendHelloWorld(toDomain, message, {
       value: interchainGasPayment,
