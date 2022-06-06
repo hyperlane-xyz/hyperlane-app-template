@@ -3,14 +3,14 @@
   "description": "A basic skeleton of an Abacus app",
   "version": "0.2.1",
   "dependencies": {
-    "@abacus-network/app": "0.2.1-alpha5",
-    "@abacus-network/sdk": "0.2.1-alpha5",
+    "@abacus-network/app": "0.2.1-alpha11",
+    "@abacus-network/sdk": "0.2.1-alpha11",
     "@openzeppelin/contracts-upgradeable": "~4.5.0",
     "ethers": "^5.4.7"
   },
   "devDependencies": {
-    "@abacus-network/deploy": "0.2.1-alpha5",
-    "@abacus-network/hardhat": "0.2.1-alpha5",
+    "@abacus-network/deploy": "0.2.1-alpha11",
+    "@abacus-network/hardhat": "0.2.1-alpha11",
     "@nomiclabs/hardhat-ethers": "^2.0.1",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@typechain/ethers-v5": "^10.0.0",
@@ -44,8 +44,7 @@
     "prettier": "prettier --write ./contracts ./src ./test",
     "test": "npm run test:contracts && npm run test:sdk && npm run test:deploy",
     "test:contracts": "hardhat test test/helloworld.test.ts",
-    "test:deploy": "hardhat test test/deploy.test.ts",
-    "test:sdk": ""
+    "test:deploy": "hardhat test test/deploy.test.ts"
   },
   "types": "dist/index.d.ts"
 }
