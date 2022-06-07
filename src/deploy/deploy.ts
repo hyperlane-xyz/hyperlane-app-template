@@ -1,62 +1,29 @@
 import { AbacusRouterDeployer } from '@abacus-network/deploy';
-import {
-  AbacusCore,
-  ChainName,
-  ChainMap,
-  MultiProvider,
-} from '@abacus-network/sdk';
-import { HelloWorldAddresses } from '../sdk/contracts';
-import { HelloWorldConfig } from '../sdk/types';
-import { HelloWorld__factory } from '../types';
+import { ChainName } from '@abacus-network/sdk';
+
+import { HelloWorldContracts, HelloWorldFactories } from '../sdk/contracts';
+import { HelloWorldConfig } from '../sdk/config';
 
 export class HelloWorldDeployer<
-  Networks extends ChainName,
+  Chain extends ChainName,
 > extends AbacusRouterDeployer<
-  Networks,
+  Chain,
   HelloWorldConfig,
-  HelloWorldAddresses
+  HelloWorldFactories,
+  HelloWorldContracts
 > {
-  constructor(
-    multiProvider: MultiProvider<Networks>,
-    config: HelloWorldConfig,
-    core: AbacusCore<Networks>,
-  ) {
-    const networks = multiProvider.networks();
-    const crossConfigMap = Object.fromEntries(
-      networks.map((network) => [network, config]),
-    ) as ChainMap<Networks, HelloWorldConfig>;
-    super(multiProvider, crossConfigMap, core);
-  }
+  // TODO remove need for this boilerplate
+  async deployContracts(chain: Chain, config: HelloWorldConfig) {
+    const dc = this.multiProvider.getChainConnection(chain);
 
-  async deployContracts(
-    network: Networks,
-    config: HelloWorldConfig,
-  ): Promise<HelloWorldAddresses> {
-    const dc = this.multiProvider.getDomainConnection(network);
-    const signer = dc.signer!;
+    const router = await this.deployContract(chain, 'router', []);
 
-    const router = await this.deployContract(
-      network,
-      'HelloWorld',
-      new HelloWorld__factory(signer),
-      [],
-    );
-
-    const abacusConnectionManager =
-      this.core?.getContracts(network).abacusConnectionManager!;
-    const initTx = await router.initialize(abacusConnectionManager.address);
+    const initTx = await router.initialize(config.abacusConnectionManager);
     await initTx.wait(dc.confirmations);
 
     return {
-      router: router.address,
-      abacusConnectionManager: abacusConnectionManager.address,
+      router: router,
+      helloWorld: router,
     };
-  }
-
-  mustGetRouter(network: Networks, addresses: HelloWorldAddresses) {
-    return HelloWorld__factory.connect(
-      addresses.router,
-      this.multiProvider.getDomainConnection(network).signer!,
-    );
   }
 }

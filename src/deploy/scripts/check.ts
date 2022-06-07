@@ -1,8 +1,17 @@
 import { utils } from '@abacus-network/deploy';
+import {
+  AbacusCore,
+  buildContracts,
+  ChainMap,
+  ChainName,
+  InterchainGasCalculator,
+} from '@abacus-network/sdk';
 import { ethers } from 'hardhat';
-import { HelloWorldApp } from '../../sdk';
+import { HelloWorldApp } from '../../sdk/app';
+import { HelloWorldContracts, helloWorldFactories } from '../../sdk/contracts';
 import { HelloWorldChecker } from '../check';
-import { testConfigs } from '../networks';
+import { getConfigMap, testConfigs } from '../config';
+import { addresses } from '../../sdk/environments/test';
 
 async function check() {
   const [signer] = await ethers.getSigners();
@@ -11,14 +20,32 @@ async function check() {
     signer,
   );
 
-  const app = HelloWorldApp.fromEnvironment('test', multiProvider);
-  const yoChecker = new HelloWorldChecker(multiProvider, app, {
-    test1: { owner: signer.address },
-    test2: { owner: signer.address },
-    test3: { owner: signer.address },
-  });
-  await yoChecker.check();
-  yoChecker.expectEmpty();
+  const contractsMap = buildContracts(
+    addresses,
+    helloWorldFactories,
+  ) as ChainMap<ChainName, HelloWorldContracts>;
+  // @ts-ignore TODO fix fromEnvironment param type
+  const core = AbacusCore.fromEnvironment('test', multiProvider);
+  const interchainGasCalculator = new InterchainGasCalculator(
+    // @ts-ignore TODO fix multiProvider type issues
+    multiProvider,
+    core,
+  );
+  const app = new HelloWorldApp(
+    contractsMap,
+    // @ts-ignore TODO fix multiProvider type issues
+    multiProvider,
+    interchainGasCalculator,
+  );
+  const helloWorldChecker = new HelloWorldChecker(
+    multiProvider,
+    app,
+    getConfigMap(signer.address),
+  );
+  await helloWorldChecker.check();
+  helloWorldChecker.expectEmpty();
 }
 
-check().then(console.log).catch(console.error);
+check()
+  .then(() => console.info('Check complete'))
+  .catch(console.error);

@@ -1,3 +1,4 @@
+// TODO move this file to someplace auto-genned consts are stored
 export const addresses = {
   test1: {
     router: '0x5FbDB2315678afecb367f032d93F642f64180aa3',

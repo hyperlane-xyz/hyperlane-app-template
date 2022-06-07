@@ -22,13 +22,6 @@
     "outDir": "./dist/",
     "rootDir": "./"
   },
-  "exclude": [
-    "./node_modules/",
-    "./dist/",
-    "./src/types/hardhat.d.ts"
-  ],
-  "include": [
-  "./src/",
-  "hardhat.config.ts"
-  ]
+  "exclude": ["./node_modules/", "./dist/", "./src/types/hardhat.d.ts"],
+  "include": ["./src/", "./test", "hardhat.config.ts"]
 }

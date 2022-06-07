@@ -1,10 +1,11 @@
 import { utils } from '@abacus-network/deploy';
-import { AbacusCore } from '@abacus-network/sdk';
 import '@nomiclabs/hardhat-ethers';
 import { ethers } from 'hardhat';
 import path from 'path';
-import { HelloWorldDeployer } from '..';
-import { testConfigs } from '../networks';
+import { helloWorldFactories } from '../../sdk/contracts';
+import { getConfigMap, testConfigs } from '../config';
+import { HelloWorldDeployer } from '../deploy';
+import { writeContracts } from './utils';
 
 async function main() {
   const [signer] = await ethers.getSigners();
@@ -13,18 +14,18 @@ async function main() {
     testConfigs,
     signer,
   );
-  const core = AbacusCore.fromEnvironment('test', multiProvider);
-
   const deployer = new HelloWorldDeployer(
     multiProvider,
-    { owner: signer.address },
-    core,
+    getConfigMap(signer.address),
+    helloWorldFactories,
   );
-  const addresses = await deployer.deploy();
-  deployer.writeContracts(
-    addresses,
+  const chainToContracts = await deployer.deploy();
+  writeContracts(
+    chainToContracts,
     path.join('./src/sdk/environments/', environment + '.ts'),
   );
 }
 
-main().then(console.log).catch(console.error);
+main()
+  .then(() => console.info('Deploy complete'))
+  .catch(console.error);

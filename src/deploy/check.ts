@@ -1,16 +1,15 @@
 import { AbacusRouterChecker } from '@abacus-network/deploy';
 import { ChainName } from '@abacus-network/sdk';
-import { HelloWorldApp } from '../sdk';
-import { HelloWorldConfig } from '../sdk/types';
+import { HelloWorldApp } from '../sdk/app';
+import { HelloWorldConfig } from '../sdk/config';
+import { HelloWorldContracts } from '../sdk/contracts';
 
 export class HelloWorldChecker<
-  Networks extends ChainName,
+  Chain extends ChainName,
 > extends AbacusRouterChecker<
-  Networks,
-  HelloWorldApp<Networks>,
+  Chain,
+  HelloWorldContracts,
+  // @ts-ignore TODO AbacusApp derived classes are not working here
+  HelloWorldApp<Chain>,
   HelloWorldConfig
-> {
-  mustGetRouter(network: Networks) {
-    return this.app.getContracts(network).router;
-  }
-}
+> {}

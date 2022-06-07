@@ -57,7 +57,7 @@ contract HelloWorld is Router {
     {
         sent += 1;
         sentTo[_destinationDomain] += 1;
-        _dispatchWithGasAndCheckpoint(
+        _dispatchWithGas(
             _destinationDomain,
             bytes(_message),
             msg.value

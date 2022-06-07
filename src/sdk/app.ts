@@ -8,71 +8,73 @@ import {
   MultiProvider,
 } from '@abacus-network/sdk';
 import { BigNumber, ethers } from 'ethers';
-import { HelloWorldAddresses, HelloWorldContracts } from './contracts';
-import { environments } from './environments';
-
-type Environments = typeof environments;
-type EnvironmentName = keyof Environments;
+import { HelloWorldContracts } from './contracts';
 
 export class HelloWorldApp<
-  Networks extends ChainName = ChainName,
-> extends AbacusApp<HelloWorldContracts, Networks> {
+  Chain extends ChainName = ChainName,
+> extends AbacusApp<HelloWorldContracts, Chain> {
   constructor(
-    networkAddresses: ChainMap<Networks, HelloWorldAddresses>,
-    multiProvider: MultiProvider<Networks>,
-    private interchainGasCalculator: InterchainGasCalculator,
+    contractsMap: ChainMap<Chain, HelloWorldContracts>,
+    multiProvider: MultiProvider<Chain>,
+    public interchainGasCalculator: InterchainGasCalculator<Chain>,
   ) {
-    super(HelloWorldContracts, networkAddresses, multiProvider);
+    super(contractsMap, multiProvider);
   }
 
-  static fromNetworkAddresses<Networks extends ChainName = ChainName>(
-    networkAddresses: ChainMap<Networks, HelloWorldAddresses>,
-    multiProvider: MultiProvider<Networks>,
-    core: AbacusCore<Networks>,
+  static fromContractsMap<Chain extends ChainName = ChainName>(
+    contractsMap: ChainMap<Chain, HelloWorldContracts>,
+    multiProvider: MultiProvider<Chain>,
+    core: AbacusCore<Chain>,
   ) {
     const interchainGasCalculator = new InterchainGasCalculator(
-      // TODO remove cast when InterchainGasCalculator is more strongly typed:
-      // https://github.com/abacus-network/abacus-monorepo/issues/407
-      multiProvider as MultiProvider<any>,
-      core as AbacusCore<any>,
+      multiProvider as MultiProvider<Chain>,
+      core as AbacusCore<Chain>,
     );
     return new HelloWorldApp(
-      networkAddresses,
+      contractsMap,
       multiProvider,
       interchainGasCalculator,
     );
   }
 
-  static fromEnvironment(
-    name: EnvironmentName,
-    multiProvider: MultiProvider<keyof Environments[typeof name]>,
-  ) {
-    const core = AbacusCore.fromEnvironment(name, multiProvider);
-    return HelloWorldApp.fromNetworkAddresses(
-      environments[name],
-      multiProvider,
-      core,
-    );
-  }
+  // TODO Consider replacing Environment concept
+  // static fromEnvironment<Chain extends ChainName = ChainName>(
+  //   name: CoreEnvironment,
+  //   multiProvider: MultiProvider<CoreEnvironmentChain<'test'>>,
+  // ) {
+  //   const contractsMap = buildContracts(addresses, helloWorldFactories);
+  //   // @ts-ignore TODO fix fromEnvironment param type, CoreEnvironmentChain<CoreEnvironment> works but pushes problem up to consumer
+  //   // prettier-ignore
+  //   const core = AbacusCore.fromEnvironment(name, multiProvider) as AbacusCore<Chain>;
+  //   const interchainGasCalculator = new InterchainGasCalculator(
+  //     multiProvider,
+  //     core,
+  //   );
+  //   return new HelloWorldApp(
+  //     contractsMap,
+  //     multiProvider,
+  //     interchainGasCalculator,
+  //   );
+  // }
 
   async sendHelloWorld(
-    from: Networks,
-    to: Networks,
+    from: Chain,
+    to: Chain,
     message: string,
   ): Promise<ethers.ContractReceipt> {
-    const router = this.getContracts(from).router;
+    const helloWorldContract = this.getContracts(from).router;
 
-    const fromDomain = ChainNameToDomainId[from];
     const toDomain = ChainNameToDomainId[to];
 
     const interchainGasPayment =
       await this.interchainGasCalculator.estimatePaymentForHandleGasAmount(
-        fromDomain,
-        toDomain,
+        // @ts-ignore TODO Exclude<> type in IGC is incorrect
+        from,
+        to,
         // Actual gas costs depend on the size of the message
         BigNumber.from('100000'),
       );
-    const tx = await router.sendHelloWorld(toDomain, message, {
+    const tx = await helloWorldContract.sendHelloWorld(toDomain, message, {
       value: interchainGasPayment,
     });
     return tx.wait();

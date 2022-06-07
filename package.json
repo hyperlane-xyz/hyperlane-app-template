@@ -16,6 +16,7 @@
     "@typechain/ethers-v5": "^10.0.0",
     "@typechain/hardhat": "^6.0.0",
     "@types/mocha": "^9.1.0",
+    "@types/node": "^17.0.41",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "chai": "^4.3.0",
@@ -42,6 +43,7 @@
     "build:ts": "tsc",
     "coverage": "hardhat coverage",
     "prettier": "prettier --write ./contracts ./src ./test",
+    "lint:ts": "eslint . --ext .ts",
     "test": "npm run test:contracts && npm run test:sdk && npm run test:deploy",
     "test:contracts": "hardhat test test/helloworld.test.ts",
     "test:deploy": "hardhat test test/deploy.test.ts"
