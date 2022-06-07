@@ -23,7 +23,6 @@ export class HelloWorldDeployer<
 
     return {
       router: router,
-      helloWorld: router,
     };
   }
 }
