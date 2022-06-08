@@ -1,11 +1,11 @@
 import { utils } from '@abacus-network/deploy';
 import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
+import { serializeContracts } from '@abacus-network/sdk';
 import '@nomiclabs/hardhat-ethers';
 import { ethers } from 'hardhat';
 import { helloWorldFactories } from '../../sdk/contracts';
 import { getConfigMap, testConfigs } from '../config';
 import { HelloWorldDeployer } from '../deploy';
-import { extractContractAddresses } from './utils';
 
 async function main() {
   const [signer] = await ethers.getSigners();
@@ -23,7 +23,7 @@ async function main() {
     core,
   );
   const chainToContracts = await deployer.deploy();
-  const addresses = extractContractAddresses(chainToContracts);
+  const addresses = serializeContracts(chainToContracts);
   console.info('===Contract Addresses===');
   console.info(JSON.stringify(addresses));
 }
