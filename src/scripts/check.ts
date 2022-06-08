@@ -1,11 +1,11 @@
 import { utils } from '@abacus-network/deploy';
 import { buildContracts, ChainMap, ChainName } from '@abacus-network/sdk';
 import { ethers } from 'hardhat';
-import { HelloWorldApp } from '../../sdk/app';
-import { HelloWorldContracts, helloWorldFactories } from '../../sdk/contracts';
-import { addresses } from '../../sdk/environments/test';
-import { HelloWorldChecker } from '../check';
-import { getConfigMap, testConfigs } from '../config';
+import { HelloWorldChecker } from '../deploy/check';
+import { getConfigMap, testConfigs } from '../deploy/config';
+import { HelloWorldApp } from '../sdk/app';
+import { HelloWorldContracts, helloWorldFactories } from '../sdk/contracts';
+import addresses from '../sdk/environments/test.json';
 
 async function check() {
   const [signer] = await ethers.getSigners();

@@ -3,9 +3,9 @@ import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
 import { serializeContracts } from '@abacus-network/sdk';
 import '@nomiclabs/hardhat-ethers';
 import { ethers } from 'hardhat';
-import { helloWorldFactories } from '../../sdk/contracts';
-import { getConfigMap, testConfigs } from '../config';
-import { HelloWorldDeployer } from '../deploy';
+import { getConfigMap, testConfigs } from '../deploy/config';
+import { HelloWorldDeployer } from '../deploy/deploy';
+import { helloWorldFactories } from '../sdk/contracts';
 
 async function main() {
   const [signer] = await ethers.getSigners();
