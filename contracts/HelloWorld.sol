@@ -57,11 +57,7 @@ contract HelloWorld is Router {
     {
         sent += 1;
         sentTo[_destinationDomain] += 1;
-        _dispatchWithGas(
-            _destinationDomain,
-            bytes(_message),
-            msg.value
-        );
+        _dispatchWithGas(_destinationDomain, bytes(_message), msg.value);
         emit SentHelloWorld(_localDomain(), _destinationDomain, _message);
     }
 
