@@ -1,80 +1,111 @@
-import { ethers, abacus } from 'hardhat';
-import { expect } from 'chai';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-
-import { HelloWorld } from '../src/types';
-import { BigNumber } from 'ethers';
-import { HelloWorldDeployer } from '../src/deploy/deploy';
-import { localTestConfigs } from './config';
 import { utils } from '@abacus-network/deploy';
-import { getConfigMap, TestNetworks } from '../src/deploy/config';
+import '@abacus-network/hardhat';
+// TODO export TestCoreApp from @abacus-network/hardhat properly
+import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
+// TODO export TestCoreDeploy from @abacus-network/hardhat properly
+import { TestCoreDeploy } from '@abacus-network/hardhat/dist/src/TestCoreDeploy';
+import { ChainNameToDomainId } from '@abacus-network/sdk';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { expect } from 'chai';
+import { BigNumber } from 'ethers';
+import { ethers } from 'hardhat';
+import { testConfigs } from '../src/deploy/config';
+import { HelloWorldDeployer } from '../src/deploy/deploy';
 import { helloWorldFactories } from '../src/sdk/contracts';
-
-const localDomain = 1000;
-const remoteDomain = 2000;
-// const domains = [localDomain, remoteDomain];
+import { HelloWorld } from '../src/types';
 
 describe('HelloWorld', async () => {
-  let signer: SignerWithAddress,
-    router: HelloWorld,
-    remote: HelloWorld,
-    helloWorld: HelloWorldDeployer<TestNetworks>;
+  const localChain = 'test1';
+  const remoteChain = 'test2';
+  const localDomain = ChainNameToDomainId[localChain];
+  const remoteDomain = ChainNameToDomainId[remoteChain];
+
+  let signer: SignerWithAddress;
+  let local: HelloWorld;
+  let remote: HelloWorld;
+  // TODO fix multiProvider type issues
+  let multiProvider: any; /*MultiProvider<TestChainNames>;*/
+  let coreApp: TestCoreApp;
 
   before(async () => {
     [signer] = await ethers.getSigners();
-    await abacus.deploy();
+
+    multiProvider = utils.getMultiProviderFromConfigAndSigner(
+      testConfigs,
+      signer,
+    );
+
+    const coreDeployer = new TestCoreDeploy(multiProvider);
+    const coreContractsMaps = await coreDeployer.deploy();
+    coreApp = new TestCoreApp(coreContractsMaps, multiProvider);
   });
 
   beforeEach(async () => {
-    const multiProvider = utils.getMultiProviderFromConfigAndSigner(
-      localTestConfigs,
-      signer,
-    );
-    // @ts-ignore TODO fix multiProvider type issues
-    helloWorld = new HelloWorldDeployer(
+    const helloWorld = new HelloWorldDeployer(
       multiProvider,
-      getConfigMap(signer.address),
+      {
+        test1: {
+          owner: signer.address,
+          abacusConnectionManager:
+            coreApp.getContracts('test1').abacusConnectionManager.address,
+        },
+        test2: {
+          owner: signer.address,
+          abacusConnectionManager:
+            coreApp.getContracts('test2').abacusConnectionManager.address,
+        },
+        test3: {
+          owner: signer.address,
+          abacusConnectionManager:
+            coreApp.getContracts('test3').abacusConnectionManager.address,
+        },
+      },
       helloWorldFactories,
     );
     const contracts = await helloWorld.deploy();
-    router = contracts['test1'].router;
-    remote = contracts['test2'].router;
-    // router = helloWorld.router(localDomain);
-    // remote = helloWorld.router(remoteDomain);
-    expect(await router.sent()).to.equal(0);
-    expect(await router.received()).to.equal(0);
-    // TODO re-enable these
-    // expect(await remote.sent()).to.equal(0);
-    // expect(await remote.received()).to.equal(0);
+
+    local = contracts[localChain].router;
+    remote = contracts[remoteChain].router;
+
+    expect(await local.sent()).to.equal(0);
+    expect(await local.received()).to.equal(0);
+    expect(await remote.sent()).to.equal(0);
+    expect(await remote.received()).to.equal(0);
   });
 
   it('sends a message', async () => {
-    await expect(router.sendHelloWorld(remoteDomain, 'Hello')).to.emit(
-      abacus.outbox(localDomain),
+    // Using outbox.contract instead of outbox because it's a proxy
+    const outbox = coreApp.getContracts(localChain).outbox.contract;
+    await expect(local.sendHelloWorld(remoteDomain, 'Hello')).to.emit(
+      outbox,
       'Dispatch',
     );
-    expect(await router.sent()).to.equal(1);
-    expect(await router.sentTo(remoteDomain)).to.equal(1);
-    expect(await router.received()).to.equal(0);
+    expect(await local.sent()).to.equal(1);
+    expect(await local.sentTo(remoteDomain)).to.equal(1);
+    expect(await local.received()).to.equal(0);
   });
 
   it('pays interchain gas', async () => {
     const gasPayment = BigNumber.from('1000');
+    const interchainGasPaymaster =
+      coreApp.getContracts(localChain).interchainGasPaymaster;
     await expect(
-      router.sendHelloWorld(remoteDomain, 'World', {
+      local.sendHelloWorld(remoteDomain, 'World', {
         value: gasPayment,
       }),
-    ).to.emit(abacus.interchainGasPaymaster(localDomain), 'GasPayment');
+    ).to.emit(interchainGasPaymaster, 'GasPayment');
   });
 
   it('handles a message', async () => {
-    await router.sendHelloWorld(remoteDomain, 'World');
+    await local.sendHelloWorld(remoteDomain, 'World');
     // Mock processing of the message by Abacus
-    await abacus.processOutboundMessages(localDomain);
+    await coreApp.processOutboundMessages(localChain);
     // The initial message has been dispatched.
-    expect(await router.sent()).to.equal(1);
+    expect(await local.sent()).to.equal(1);
     // The initial message has been processed.
     expect(await remote.received()).to.equal(1);
     expect(await remote.receivedFrom(localDomain)).to.equal(1);
+
+    // TODO test for event from handler
   });
 });

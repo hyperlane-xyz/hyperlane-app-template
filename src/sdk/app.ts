@@ -37,26 +37,6 @@ export class HelloWorldApp<
     );
   }
 
-  // TODO Consider replacing Environment concept
-  // static fromEnvironment<Chain extends ChainName = ChainName>(
-  //   name: CoreEnvironment,
-  //   multiProvider: MultiProvider<CoreEnvironmentChain<'test'>>,
-  // ) {
-  //   const contractsMap = buildContracts(addresses, helloWorldFactories);
-  //   // @ts-ignore TODO fix fromEnvironment param type, CoreEnvironmentChain<CoreEnvironment> works but pushes problem up to consumer
-  //   // prettier-ignore
-  //   const core = AbacusCore.fromEnvironment(name, multiProvider) as AbacusCore<Chain>;
-  //   const interchainGasCalculator = new InterchainGasCalculator(
-  //     multiProvider,
-  //     core,
-  //   );
-  //   return new HelloWorldApp(
-  //     contractsMap,
-  //     multiProvider,
-  //     interchainGasCalculator,
-  //   );
-  // }
-
   async sendHelloWorld(
     from: Chain,
     to: Chain,

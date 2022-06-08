@@ -15,25 +15,24 @@ import { addresses } from '../../sdk/environments/test';
 
 async function check() {
   const [signer] = await ethers.getSigners();
+  // @ts-ignore TODO fix multiProvider type issues
   const multiProvider = utils.getMultiProviderFromConfigAndSigner(
     testConfigs,
     signer,
-  );
+  ) as any;
 
   const contractsMap = buildContracts(
     addresses,
     helloWorldFactories,
   ) as ChainMap<ChainName, HelloWorldContracts>;
-  // @ts-ignore TODO fix multiProvider type issues
+
   const core = AbacusCore.fromEnvironment('test', multiProvider);
   const interchainGasCalculator = new InterchainGasCalculator(
-    // @ts-ignore TODO fix multiProvider type issues
     multiProvider,
     core,
   );
   const app = new HelloWorldApp(
     contractsMap,
-    // @ts-ignore TODO fix multiProvider type issues
     multiProvider,
     interchainGasCalculator,
   );

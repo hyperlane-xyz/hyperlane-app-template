@@ -1,8 +1,7 @@
 import { AbacusRouterDeployer } from '@abacus-network/deploy';
 import { ChainName } from '@abacus-network/sdk';
-
 import { HelloWorldContracts, HelloWorldFactories } from '../sdk/contracts';
-import { HelloWorldConfig } from '../sdk/config';
+import { HelloWorldConfig } from './config';
 
 export class HelloWorldDeployer<
   Chain extends ChainName,
