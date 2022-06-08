@@ -24,7 +24,7 @@ async function check() {
     addresses,
     helloWorldFactories,
   ) as ChainMap<ChainName, HelloWorldContracts>;
-  // @ts-ignore TODO fix fromEnvironment param type
+  // @ts-ignore TODO fix multiProvider type issues
   const core = AbacusCore.fromEnvironment('test', multiProvider);
   const interchainGasCalculator = new InterchainGasCalculator(
     // @ts-ignore TODO fix multiProvider type issues
@@ -37,6 +37,7 @@ async function check() {
     multiProvider,
     interchainGasCalculator,
   );
+
   const helloWorldChecker = new HelloWorldChecker(
     multiProvider,
     app,

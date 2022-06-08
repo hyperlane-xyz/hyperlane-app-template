@@ -3,67 +3,92 @@ import '@nomiclabs/hardhat-waffle';
 import { ethers } from 'hardhat';
 import { utils } from '@abacus-network/deploy';
 
-import { HelloWorldAddresses, HelloWorldApp } from '../src';
-import { HelloWorldChecker, HelloWorldDeployer } from '../src/deploy';
-import { configs } from '../src/deploy/networks';
-import { AbacusCore } from '@abacus-network/sdk';
+import { getConfigMap, testConfigs, TestNetworks } from '../src/deploy/config';
+import {
+  AbacusCore,
+  buildContracts,
+  ChainMap,
+  ChainName,
+  InterchainGasCalculator,
+} from '@abacus-network/sdk';
+import { HelloWorldApp } from '../src/sdk/app';
+import { HelloWorldDeployer } from '../src/deploy/deploy';
+import { HelloWorldChecker } from '../src/deploy/check';
+import { HelloWorldContracts, helloWorldFactories } from '../src/sdk/contracts';
+import { writeContracts, writeVerification } from '../src/deploy/scripts/utils';
+import { addresses } from '../src/sdk/environments/test';
 
 describe('deploy', async () => {
-  type TestNetworks = 'test1' | 'test2' | 'test3';
   let deployer: HelloWorldDeployer<TestNetworks>;
-  let addresses: Record<TestNetworks, HelloWorldAddresses>;
-  let core: AbacusCore<TestNetworks>;
+  let contracts: Record<TestNetworks, HelloWorldContracts>;
 
   before(async () => {
     const transactionConfigs = {
-      test1: configs.test1,
-      test2: configs.test2,
-      test3: configs.test3,
+      test1: testConfigs.test1,
+      test2: testConfigs.test2,
+      test3: testConfigs.test3,
     };
     const [signer] = await ethers.getSigners();
     const multiProvider = utils.getMultiProviderFromConfigAndSigner(
       transactionConfigs,
       signer,
     );
-    core = AbacusCore.fromEnvironment('test', multiProvider);
+    // @ts-ignore TODO fix multiProvider type issues
     deployer = new HelloWorldDeployer(
       multiProvider,
-      { owner: signer.address },
-      core,
+      getConfigMap(signer.address),
+      helloWorldFactories,
     );
   });
 
   it('deploys', async () => {
-    addresses = await deployer.deploy();
+    contracts = await deployer.deploy();
   });
 
   it('writes', async () => {
-    const base = './test/outputs/yo';
-    deployer.writeVerification(path.join(base, 'verification'));
-    deployer.writeContracts(addresses, path.join(base, 'contracts.ts'));
+    const base = './test/outputs/helloWorld';
+    writeVerification(
+      deployer.verificationInputs,
+      path.join(base, 'verification'),
+    );
+    writeContracts(contracts, path.join(base, 'contracts.ts'));
   });
 
   it('checks', async () => {
     const transactionConfigs = {
-      test1: configs.test1,
-      test2: configs.test2,
-      test3: configs.test3,
+      test1: testConfigs.test1,
+      test2: testConfigs.test2,
+      test3: testConfigs.test3,
     };
     const [signer] = await ethers.getSigners();
     const multiProvider = utils.getMultiProviderFromConfigAndSigner(
       transactionConfigs,
       signer,
     );
-    const app = HelloWorldApp.fromNetworkAddresses<TestNetworks>(
+
+    const contractsMap = buildContracts(
       addresses,
+      helloWorldFactories,
+    ) as ChainMap<ChainName, HelloWorldContracts>;
+    // @ts-ignore TODO fix fromEnvironment param type
+    const core = AbacusCore.fromEnvironment('test', multiProvider);
+    const interchainGasCalculator = new InterchainGasCalculator(
+      // @ts-ignore TODO fix multiProvider type issues
       multiProvider,
       core,
     );
-    const checker = new HelloWorldChecker(multiProvider, app, {
-      test1: { owner: signer.address },
-      test2: { owner: signer.address },
-      test3: { owner: signer.address },
-    });
+    const app = new HelloWorldApp(
+      contractsMap,
+      // @ts-ignore TODO fix multiProvider type issues
+      multiProvider,
+      interchainGasCalculator,
+    );
+
+    const checker = new HelloWorldChecker(
+      multiProvider,
+      app,
+      getConfigMap(signer.address),
+    );
     await checker.check();
     checker.expectEmpty();
   });

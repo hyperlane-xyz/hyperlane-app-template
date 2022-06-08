@@ -18,7 +18,7 @@ describe('HelloWorld', async () => {
 
   before(async () => {
     [signer] = await ethers.getSigners();
-    await abacus.deploy(domains, signer);
+    await abacus.deploy();
   });
 
   beforeEach(async () => {

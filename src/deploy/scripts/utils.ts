@@ -24,16 +24,23 @@ export function writeContracts(
     },
     {},
   );
-  const contents = `export const addresses = ${JSON.stringify(
-    addresses,
-    null,
-    2,
-  )}`;
+  const contents = `export const addresses = ${stringify(addresses)}`;
   writeToFile(filepath, contents);
+}
+
+export function writeVerification(verification: any, directory: string) {
+  objMap(verification, (chain, input) => {
+    const filepath = path.join(directory, `${chain}.json`);
+    writeToFile(filepath, stringify(input));
+  });
 }
 
 export function writeToFile(filepath: string, contents: string) {
   const dir = path.dirname(filepath);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(filepath, contents);
+}
+
+export function stringify(obj: any) {
+  return JSON.stringify(obj, null, 2);
 }
