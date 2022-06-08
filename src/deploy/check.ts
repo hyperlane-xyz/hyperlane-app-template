@@ -9,7 +9,6 @@ export class HelloWorldChecker<
 > extends AbacusRouterChecker<
   Chain,
   HelloWorldContracts,
-  // @ts-ignore TODO AbacusApp derived classes are not working here
   HelloWorldApp<Chain>,
   HelloWorldConfig
 > {}

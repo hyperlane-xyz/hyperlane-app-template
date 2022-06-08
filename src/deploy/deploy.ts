@@ -1,5 +1,10 @@
 import { AbacusRouterDeployer } from '@abacus-network/deploy';
-import { ChainName } from '@abacus-network/sdk';
+import {
+  AbacusCore,
+  ChainMap,
+  ChainName,
+  MultiProvider,
+} from '@abacus-network/sdk';
 import { HelloWorldContracts, HelloWorldFactories } from '../sdk/contracts';
 import { HelloWorldConfig } from './config';
 
@@ -7,21 +12,25 @@ export class HelloWorldDeployer<
   Chain extends ChainName,
 > extends AbacusRouterDeployer<
   Chain,
-  HelloWorldConfig,
+  HelloWorldContracts,
   HelloWorldFactories,
-  HelloWorldContracts
+  HelloWorldConfig
 > {
-  // TODO remove need for this boilerplate
+  constructor(
+    multiProvider: MultiProvider<Chain>,
+    configMap: ChainMap<Chain, HelloWorldConfig>,
+    factories: HelloWorldFactories,
+    protected core: AbacusCore<Chain>,
+  ) {
+    super(multiProvider, configMap, factories, {});
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async deployContracts(chain: Chain, config: HelloWorldConfig) {
-    const dc = this.multiProvider.getChainConnection(chain);
-
-    const router = await this.deployContract(chain, 'router', []);
-
-    const initTx = await router.initialize(config.abacusConnectionManager);
-    await initTx.wait(dc.confirmations);
-
+    const acm = this.core.getContracts(chain).abacusConnectionManager.address;
+    const router = await this.deployRouter(chain, [], [acm]);
     return {
-      router: router,
+      router,
     };
   }
 }

@@ -7,9 +7,8 @@ import { TestCoreDeploy } from '@abacus-network/hardhat/dist/src/TestCoreDeploy'
 import { ChainNameToDomainId } from '@abacus-network/sdk';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
-import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
-import { testConfigs } from '../src/deploy/config';
+import { getConfigMap, testConfigs } from '../src/deploy/config';
 import { HelloWorldDeployer } from '../src/deploy/deploy';
 import { helloWorldFactories } from '../src/sdk/contracts';
 import { HelloWorld } from '../src/types';
@@ -41,26 +40,12 @@ describe('HelloWorld', async () => {
   });
 
   beforeEach(async () => {
+    const config = getConfigMap(signer.address);
     const helloWorld = new HelloWorldDeployer(
       multiProvider,
-      {
-        test1: {
-          owner: signer.address,
-          abacusConnectionManager:
-            coreApp.getContracts('test1').abacusConnectionManager.address,
-        },
-        test2: {
-          owner: signer.address,
-          abacusConnectionManager:
-            coreApp.getContracts('test2').abacusConnectionManager.address,
-        },
-        test3: {
-          owner: signer.address,
-          abacusConnectionManager:
-            coreApp.getContracts('test3').abacusConnectionManager.address,
-        },
-      },
+      config,
       helloWorldFactories,
+      coreApp,
     );
     const contracts = await helloWorld.deploy();
 
@@ -85,16 +70,16 @@ describe('HelloWorld', async () => {
     expect(await local.received()).to.equal(0);
   });
 
-  it('pays interchain gas', async () => {
-    const gasPayment = BigNumber.from('1000');
-    const interchainGasPaymaster =
-      coreApp.getContracts(localChain).interchainGasPaymaster;
-    await expect(
-      local.sendHelloWorld(remoteDomain, 'World', {
-        value: gasPayment,
-      }),
-    ).to.emit(interchainGasPaymaster, 'GasPayment');
-  });
+  // it('pays interchain gas', async () => {
+  //   const gasPayment = BigNumber.from('1000');
+  //   const interchainGasPaymaster =
+  //     coreApp.getContracts(localChain).interchainGasPaymaster;
+  //   await expect(
+  //     local.sendHelloWorld(remoteDomain, 'World', {
+  //       value: gasPayment,
+  //     }),
+  //   ).to.emit(interchainGasPaymaster, 'GasPayment');
+  // });
 
   it('handles a message', async () => {
     await local.sendHelloWorld(remoteDomain, 'World');

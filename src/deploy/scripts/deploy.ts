@@ -1,4 +1,5 @@
 import { utils } from '@abacus-network/deploy';
+import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
 import '@nomiclabs/hardhat-ethers';
 import { ethers } from 'hardhat';
 import { helloWorldFactories } from '../../sdk/contracts';
@@ -12,10 +13,14 @@ async function main() {
     testConfigs,
     signer,
   );
+
+  const core = TestCoreApp.fromEnvironment('test', multiProvider);
+
   const deployer = new HelloWorldDeployer(
     multiProvider,
     getConfigMap(signer.address),
     helloWorldFactories,
+    core,
   );
   const chainToContracts = await deployer.deploy();
   const addresses = extractContractAddresses(chainToContracts);

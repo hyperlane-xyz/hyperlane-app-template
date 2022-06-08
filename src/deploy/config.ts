@@ -4,11 +4,8 @@ import {
   ChainMap,
   TestChainNames,
 } from '@abacus-network/sdk';
-import { addresses } from '../sdk/environments/test';
 
-export type HelloWorldConfig = RouterConfig & {
-  owner: string;
-};
+export type HelloWorldConfig = RouterConfig;
 
 // TODO reduce this config boilerplate
 
@@ -24,15 +21,12 @@ export function getConfigMap(
   return {
     test1: {
       owner: signerAddress,
-      abacusConnectionManager: addresses.test1.abacusConnectionManager,
     },
     test2: {
       owner: signerAddress,
-      abacusConnectionManager: addresses.test2.abacusConnectionManager,
     },
     test3: {
       owner: signerAddress,
-      abacusConnectionManager: addresses.test3.abacusConnectionManager,
     },
   };
 }

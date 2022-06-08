@@ -3,7 +3,7 @@ import { utils } from '@abacus-network/deploy';
 import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
 // TODO export TestCoreDeploy from @abacus-network/hardhat properly
 import { TestCoreDeploy } from '@abacus-network/hardhat/dist/src/TestCoreDeploy';
-import { InterchainGasCalculator, TestChainNames } from '@abacus-network/sdk';
+import { MultiProvider, TestChainNames } from '@abacus-network/sdk';
 import '@nomiclabs/hardhat-waffle';
 import { ethers } from 'hardhat';
 import { HelloWorldChecker } from '../src/deploy/check';
@@ -13,19 +13,28 @@ import { HelloWorldApp } from '../src/sdk/app';
 import { HelloWorldContracts, helloWorldFactories } from '../src/sdk/contracts';
 
 describe('deploy', async () => {
+  let multiProvider: MultiProvider<TestChainNames>;
+  let core: TestCoreApp;
   let deployer: HelloWorldDeployer<TestChainNames>;
   let contracts: Record<TestChainNames, HelloWorldContracts>;
+  let app: HelloWorldApp<TestChainNames>;
 
   before(async () => {
     const [signer] = await ethers.getSigners();
-    const multiProvider = utils.getMultiProviderFromConfigAndSigner(
+    multiProvider = utils.getMultiProviderFromConfigAndSigner(
       testConfigs,
       signer,
     );
+
+    const coreDeployer = new TestCoreDeploy(multiProvider);
+    const coreContractsMaps = await coreDeployer.deploy();
+    core = new TestCoreApp(coreContractsMaps, multiProvider);
+
     deployer = new HelloWorldDeployer(
       multiProvider,
       getConfigMap(signer.address),
       helloWorldFactories,
+      core,
     );
   });
 
@@ -33,30 +42,13 @@ describe('deploy', async () => {
     contracts = await deployer.deploy();
   });
 
+  it('builds app', async () => {
+    contracts = await deployer.deploy();
+    app = new HelloWorldApp(contracts, multiProvider);
+  });
+
   it('checks', async () => {
     const [signer] = await ethers.getSigners();
-
-    // TODO fix multiProvider type issues
-    const multiProvider = utils.getMultiProviderFromConfigAndSigner(
-      testConfigs,
-      signer,
-    ) as any;
-
-    const coreDeployer = new TestCoreDeploy(multiProvider);
-    const coreContractsMaps = await coreDeployer.deploy();
-    const coreApp = new TestCoreApp(coreContractsMaps, multiProvider);
-
-    const interchainGasCalculator = new InterchainGasCalculator(
-      multiProvider,
-      // @ts-ignore TODO fix MultiGeneric type issue
-      coreApp,
-    );
-
-    const app = new HelloWorldApp(
-      contracts,
-      multiProvider,
-      interchainGasCalculator,
-    );
 
     const checker = new HelloWorldChecker(
       multiProvider,
