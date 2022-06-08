@@ -17,20 +17,16 @@ import { HelloWorldChecker } from '../src/deploy/check';
 import { HelloWorldContracts, helloWorldFactories } from '../src/sdk/contracts';
 import { writeContracts, writeVerification } from '../src/deploy/scripts/utils';
 import { addresses } from '../src/sdk/environments/test';
+import { localTestConfigs } from './config';
 
 describe('deploy', async () => {
   let deployer: HelloWorldDeployer<TestNetworks>;
   let contracts: Record<TestNetworks, HelloWorldContracts>;
 
   before(async () => {
-    const transactionConfigs = {
-      test1: testConfigs.test1,
-      test2: testConfigs.test2,
-      test3: testConfigs.test3,
-    };
     const [signer] = await ethers.getSigners();
     const multiProvider = utils.getMultiProviderFromConfigAndSigner(
-      transactionConfigs,
+      localTestConfigs,
       signer,
     );
     // @ts-ignore TODO fix multiProvider type issues
@@ -55,14 +51,9 @@ describe('deploy', async () => {
   });
 
   it('checks', async () => {
-    const transactionConfigs = {
-      test1: testConfigs.test1,
-      test2: testConfigs.test2,
-      test3: testConfigs.test3,
-    };
     const [signer] = await ethers.getSigners();
     const multiProvider = utils.getMultiProviderFromConfigAndSigner(
-      transactionConfigs,
+      localTestConfigs,
       signer,
     );
 

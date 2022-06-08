@@ -1,11 +1,8 @@
-import { EnvironmentConfig, RouterConfig } from '@abacus-network/deploy';
-import { chainConnectionConfigs, ChainName, Chains } from '@abacus-network/sdk';
+import { RouterConfig } from '@abacus-network/deploy';
+import { chainConnectionConfigs, ChainMap, Chains } from '@abacus-network/sdk';
 import { addresses } from '../sdk/environments/test';
 
 // TODO remove all this boilerplate
-export type HelloWorldEnvironmentConfig = EnvironmentConfig<ChainName> & {
-  config: RouterConfig;
-};
 
 export const testNetworks = [Chains.test1, Chains.test2, Chains.test3] as const;
 export type TestNetworks = typeof testNetworks[number];
@@ -15,7 +12,9 @@ export const testConfigs = {
   test3: chainConnectionConfigs.test3,
 };
 
-export function getConfigMap(signerAddress: string) {
+export function getConfigMap(
+  signerAddress: string,
+): ChainMap<TestNetworks, RouterConfig> {
   return {
     test1: {
       owner: signerAddress,
