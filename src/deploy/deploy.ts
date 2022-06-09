@@ -5,7 +5,11 @@ import {
   ChainName,
   MultiProvider,
 } from '@abacus-network/sdk';
-import { HelloWorldContracts, HelloWorldFactories } from '../sdk/contracts';
+import {
+  HelloWorldContracts,
+  helloWorldFactories,
+  HelloWorldFactories,
+} from '../sdk/contracts';
 import { HelloWorldConfig } from './config';
 
 export class HelloWorldDeployer<
@@ -19,10 +23,9 @@ export class HelloWorldDeployer<
   constructor(
     multiProvider: MultiProvider<Chain>,
     configMap: ChainMap<Chain, HelloWorldConfig>,
-    factories: HelloWorldFactories,
     protected core: AbacusCore<Chain>,
   ) {
-    super(multiProvider, configMap, factories, {});
+    super(multiProvider, configMap, helloWorldFactories, {});
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -10,7 +10,7 @@ import { HelloWorldChecker } from '../src/deploy/check';
 import { getConfigMap, testConfigs } from '../src/deploy/config';
 import { HelloWorldDeployer } from '../src/deploy/deploy';
 import { HelloWorldApp } from '../src/sdk/app';
-import { HelloWorldContracts, helloWorldFactories } from '../src/sdk/contracts';
+import { HelloWorldContracts } from '../src/sdk/contracts';
 
 describe('deploy', async () => {
   let multiProvider: MultiProvider<TestChainNames>;
@@ -33,7 +33,6 @@ describe('deploy', async () => {
     deployer = new HelloWorldDeployer(
       multiProvider,
       getConfigMap(signer.address),
-      helloWorldFactories,
       core,
     );
   });

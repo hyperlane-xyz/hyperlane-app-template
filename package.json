@@ -38,16 +38,12 @@
   "packageManager": "yarn@3.2.0",
   "private": true,
   "scripts": {
-    "clean": "rm -rf cache artifacts dist",
-    "build": "npm run build:sol && npm run build:ts",
-    "build:sol": "hardhat compile && hardhat typechain",
-    "build:ts": "tsc",
+    "clean": "hardhat clean && rm -r dist",
+    "build": "hardhat compile && tsc",
+    "test": "hardhat test",
     "coverage": "hardhat coverage",
     "prettier": "prettier --write ./contracts ./src ./test",
-    "lint:ts": "eslint . --ext .ts",
-    "test": "npm run test:contracts && npm run test:deploy",
-    "test:contracts": "hardhat test test/helloworld.test.ts",
-    "test:deploy": "hardhat test test/deploy.test.ts"
+    "lint": "eslint . --ext .ts"
   },
   "types": "dist/index.d.ts"
 }

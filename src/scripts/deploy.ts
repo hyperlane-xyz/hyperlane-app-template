@@ -5,7 +5,6 @@ import '@nomiclabs/hardhat-ethers';
 import { ethers } from 'hardhat';
 import { getConfigMap, testConfigs } from '../deploy/config';
 import { HelloWorldDeployer } from '../deploy/deploy';
-import { helloWorldFactories } from '../sdk/contracts';
 
 async function main() {
   const [signer] = await ethers.getSigners();
@@ -19,7 +18,6 @@ async function main() {
   const deployer = new HelloWorldDeployer(
     multiProvider,
     getConfigMap(signer.address),
-    helloWorldFactories,
     core,
   );
   const chainToContracts = await deployer.deploy();

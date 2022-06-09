@@ -10,7 +10,6 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { getConfigMap, testConfigs } from '../src/deploy/config';
 import { HelloWorldDeployer } from '../src/deploy/deploy';
-import { helloWorldFactories } from '../src/sdk/contracts';
 import { HelloWorld } from '../src/types';
 
 describe('HelloWorld', async () => {
@@ -43,7 +42,6 @@ describe('HelloWorld', async () => {
     const helloWorld = new HelloWorldDeployer(
       multiProvider,
       getConfigMap(signer.address),
-      helloWorldFactories,
       coreApp,
     );
     const contracts = await helloWorld.deploy();
