@@ -83,7 +83,7 @@ jobs:
           key: ${{ runner.os }}-yarn-cache-${{ hashFiles('./yarn.lock') }}
 
       - name: lint 
-        run: yarn run lint:ts
+        run: yarn run lint
 
   test:
     runs-on: ubuntu-latest
