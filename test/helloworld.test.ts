@@ -1,4 +1,4 @@
-import { utils } from '@abacus-network/deploy';
+import { utils as deployUtils } from '@abacus-network/deploy';
 import '@abacus-network/hardhat';
 // TODO export TestCoreApp from @abacus-network/hardhat properly
 import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
@@ -29,7 +29,7 @@ describe('HelloWorld', async () => {
   before(async () => {
     [signer] = await ethers.getSigners();
 
-    multiProvider = utils.getMultiProviderFromConfigAndSigner(
+    multiProvider = deployUtils.getMultiProviderFromConfigAndSigner(
       testConfigs,
       signer,
     );
@@ -40,10 +40,9 @@ describe('HelloWorld', async () => {
   });
 
   beforeEach(async () => {
-    const config = getConfigMap(signer.address);
     const helloWorld = new HelloWorldDeployer(
       multiProvider,
-      config,
+      getConfigMap(signer.address),
       helloWorldFactories,
       coreApp,
     );
@@ -52,6 +51,7 @@ describe('HelloWorld', async () => {
     local = contracts[localChain].router;
     remote = contracts[remoteChain].router;
 
+    // The all counts start empty
     expect(await local.sent()).to.equal(0);
     expect(await local.received()).to.equal(0);
     expect(await remote.sent()).to.equal(0);
@@ -59,27 +59,16 @@ describe('HelloWorld', async () => {
   });
 
   it('sends a message', async () => {
-    // Using outbox.contract instead of outbox because it's a proxy
-    const outbox = coreApp.getContracts(localChain).outbox.contract;
     await expect(local.sendHelloWorld(remoteDomain, 'Hello')).to.emit(
-      outbox,
-      'Dispatch',
+      local,
+      'SentHelloWorld',
     );
+    // The sent counts are correct
     expect(await local.sent()).to.equal(1);
     expect(await local.sentTo(remoteDomain)).to.equal(1);
+    // The received counts are correct
     expect(await local.received()).to.equal(0);
   });
-
-  // it('pays interchain gas', async () => {
-  //   const gasPayment = BigNumber.from('1000');
-  //   const interchainGasPaymaster =
-  //     coreApp.getContracts(localChain).interchainGasPaymaster;
-  //   await expect(
-  //     local.sendHelloWorld(remoteDomain, 'World', {
-  //       value: gasPayment,
-  //     }),
-  //   ).to.emit(interchainGasPaymaster, 'GasPayment');
-  // });
 
   it('handles a message', async () => {
     await local.sendHelloWorld(remoteDomain, 'World');
@@ -90,7 +79,5 @@ describe('HelloWorld', async () => {
     // The initial message has been processed.
     expect(await remote.received()).to.equal(1);
     expect(await remote.receivedFrom(localDomain)).to.equal(1);
-
-    // TODO test for event from handler
   });
 });

@@ -5,7 +5,7 @@ import { HelloWorldChecker } from '../deploy/check';
 import { getConfigMap, testConfigs } from '../deploy/config';
 import { HelloWorldApp } from '../sdk/app';
 import { HelloWorldContracts, helloWorldFactories } from '../sdk/contracts';
-import addresses from '../sdk/environments/test.json';
+import testEnvironmentAddresses from '../sdk/environments/test.json';
 
 async function check() {
   const [signer] = await ethers.getSigners();
@@ -15,9 +15,10 @@ async function check() {
   );
 
   const contractsMap = buildContracts(
-    addresses,
+    testEnvironmentAddresses,
     helloWorldFactories,
   ) as ChainMap<ChainName, HelloWorldContracts>;
+
   const app = new HelloWorldApp(contractsMap, multiProvider);
 
   const helloWorldChecker = new HelloWorldChecker(
