@@ -1,3 +1,4 @@
+import { TypedListener } from '@abacus-network/core/dist/common';
 import {
   AbacusApp,
   ChainName,
@@ -5,6 +6,7 @@ import {
   Remotes,
 } from '@abacus-network/sdk';
 import { ethers } from 'ethers';
+import { ReceivedHelloWorldEvent } from '../types/contracts/HelloWorld';
 import { HelloWorldContracts } from './contracts';
 
 export class HelloWorldApp<
@@ -14,11 +16,23 @@ export class HelloWorldApp<
     from: From,
     to: Remotes<Chain, From>,
     message: string,
+    receiveHandler?: TypedListener<ReceivedHelloWorldEvent>,
   ): Promise<ethers.ContractReceipt> {
-    const helloWorldContract = this.getContracts(from).router;
+    const sender = this.getContracts(from).router;
     const toDomain = ChainNameToDomainId[to];
-    const tx = await helloWorldContract.sendHelloWorld(toDomain, message);
-    return tx.wait();
+    const tx = await sender.sendHelloWorld(toDomain, message);
+    const receipt = await tx.wait();
+
+    if (receiveHandler) {
+      const recipient = this.getContracts(to).router;
+      const filter = recipient.filters.ReceivedHelloWorld(
+        ChainNameToDomainId[from],
+        ChainNameToDomainId[to],
+      );
+      recipient.once(filter, receiveHandler);
+    }
+
+    return receipt;
   }
 
   async channelStats<From extends Chain>(from: From, to: Remotes<Chain, From>) {
@@ -28,7 +42,8 @@ export class HelloWorldApp<
     const received = await this.getContracts(to).router.receivedFrom(
       ChainNameToDomainId[from],
     );
-    return { sent, received };
+
+    return { sent: sent.toNumber(), received: received.toNumber() };
   }
 
   async stats() {
