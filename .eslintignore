@@ -2,4 +2,4 @@ node_modules
 dist
 coverage
 src/types
-.hardhat.config.ts
+hardhat.config.ts
