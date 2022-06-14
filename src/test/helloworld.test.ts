@@ -12,9 +12,9 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
-import { getConfigMap, testConfigs } from '../src/deploy/config';
-import { HelloWorldDeployer } from '../src/deploy/deploy';
-import { HelloWorld } from '../src/types';
+import { getConfigMap, testConfigs } from '../deploy/config';
+import { HelloWorldDeployer } from '../deploy/deploy';
+import { HelloWorld } from '../types';
 
 describe('HelloWorld', async () => {
   const localChain = 'test1';
