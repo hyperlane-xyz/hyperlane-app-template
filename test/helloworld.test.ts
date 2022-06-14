@@ -4,7 +4,11 @@ import '@abacus-network/hardhat';
 import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
 // TODO export TestCoreDeploy from @abacus-network/hardhat properly
 import { TestCoreDeploy } from '@abacus-network/hardhat/dist/src/TestCoreDeploy';
-import { ChainNameToDomainId } from '@abacus-network/sdk';
+import {
+  ChainNameToDomainId,
+  MultiProvider,
+  TestChainNames,
+} from '@abacus-network/sdk';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
@@ -21,8 +25,7 @@ describe('HelloWorld', async () => {
   let signer: SignerWithAddress;
   let local: HelloWorld;
   let remote: HelloWorld;
-  // TODO fix multiProvider type issues
-  let multiProvider: any; /*MultiProvider<TestChainNames>;*/
+  let multiProvider: MultiProvider<TestChainNames>;
   let coreApp: TestCoreApp;
 
   before(async () => {
