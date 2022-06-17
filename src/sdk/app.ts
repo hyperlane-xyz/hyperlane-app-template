@@ -21,7 +21,11 @@ export class HelloWorldApp<
     const sender = this.getContracts(from).router;
     const toDomain = ChainNameToDomainId[to];
     const chainConnection = this.multiProvider.getChainConnection(from);
-    const tx = await sender.sendHelloWorld(toDomain, message, chainConnection.overrides);
+    const tx = await sender.sendHelloWorld(
+      toDomain,
+      message,
+      chainConnection.overrides,
+    );
     const receipt = await tx.wait(chainConnection.confirmations);
 
     if (receiveHandler) {
