@@ -23,7 +23,7 @@
     "rootDir": "./",
     "resolveJsonModule": true
   },
-  "exclude": ["./src/types/hardhat.d.ts"],
+  "exclude": ["./node_modules/", "./dist/", "./src/types/hardhat.d.ts"],
   "include": ["./src/"],
   "files": ["hardhat.config.ts"]
 }
