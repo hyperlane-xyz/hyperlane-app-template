@@ -5,60 +5,35 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@abacus-network/app@npm:0.2.3, @abacus-network/app@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@abacus-network/app@npm:0.2.3"
+"@abacus-network/app@npm:^0.3.0-beta0":
+  version: 0.3.0-beta0
+  resolution: "@abacus-network/app@npm:0.3.0-beta0"
   dependencies:
-    "@abacus-network/core": ^0.2.3
-    "@abacus-network/utils": ^0.2.3
+    "@abacus-network/core": ^0.3.0-beta0
+    "@abacus-network/utils": ^0.3.0-beta0
     "@openzeppelin/contracts-upgradeable": ^4.5.0
-  checksum: 83a673b03d8a03a9a1d413212721dec23dede11d3b6bc968b9130c3206b24e2498c5bea833bdc8291568a4b176cf9ad804aea7049a89df65c41a01347ff0f74a
+  checksum: 0c8568854d90734ace306380636414a4593ea4b13d90ca2aa5413edbbd26a6ebd0b28c4cf6ff7b9f6e455c6056d62f19f641f0da1e7090220cd3aecdaa9067ba
   languageName: node
   linkType: hard
 
-"@abacus-network/core@npm:0.2.3, @abacus-network/core@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@abacus-network/core@npm:0.2.3"
+"@abacus-network/celo-ethers-provider@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@abacus-network/celo-ethers-provider@npm:0.1.0"
+  peerDependencies:
+    ethers: ^5
+  checksum: 06f440366bbd9ddf9962aa46c471be1fb587909c4da71a0d816497a5c0c8597e9b315d70fe9ae728ed51fc936097da50da2cd18f750861f3d602660b8ea1ecfd
+  languageName: node
+  linkType: hard
+
+"@abacus-network/core@npm:^0.3.0-beta0":
+  version: 0.3.0-beta0
+  resolution: "@abacus-network/core@npm:0.3.0-beta0"
   dependencies:
-    "@abacus-network/utils": ^0.2.3
+    "@abacus-network/utils": ^0.3.0-beta0
     "@openzeppelin/contracts": ^4.6.0
     "@openzeppelin/contracts-upgradeable": ^4.6.0
     "@summa-tx/memview-sol": ^2.0.0
-  checksum: f4740e8e14a40f01a65c5a6576e86eeb69e911fa4dd8d14cb3e1514d6e47139ea3bedeaecc9fb8c7301b11cb1ba766caa97331cc74a3e45943c8793da11d52ba
-  languageName: node
-  linkType: hard
-
-"@abacus-network/deploy@npm:0.2.3, @abacus-network/deploy@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@abacus-network/deploy@npm:0.2.3"
-  dependencies:
-    "@abacus-network/app": ^0.2.3
-    "@abacus-network/core": ^0.2.3
-    "@abacus-network/sdk": ^0.2.3
-    "@abacus-network/utils": ^0.2.3
-    "@types/debug": ^4.1.7
-    "@types/yargs": ^17.0.10
-    axios: ^0.21.3
-    debug: ^4.3.4
-    yargs: ^17.4.1
-  checksum: 7b551a5409eb569e30a72f46bed49745fac2b20dc4800c008dee73dbc9c7b2358e84df6e5f880bc044bd45be207b9fb5f1bc53c6545016b8ef0097c5c4096527
-  languageName: node
-  linkType: hard
-
-"@abacus-network/hardhat@npm:0.2.3":
-  version: 0.2.3
-  resolution: "@abacus-network/hardhat@npm:0.2.3"
-  dependencies:
-    "@abacus-network/core": ^0.2.3
-    "@abacus-network/deploy": ^0.2.3
-    "@abacus-network/sdk": ^0.2.3
-    "@abacus-network/utils": ^0.2.3
-    "@nomiclabs/hardhat-ethers": ^2.0.5
-    "@nomiclabs/hardhat-waffle": ^2.0.2
-    ethereum-waffle: ^3.2.2
-    ethers: ^5.6.8
-    hardhat: ^2.8.4
-  checksum: e58577f4023391c339f7a8c2d8e2949e71aa957c3fa8ce0f034d37ea194f7e83ddb941eeda1f0cfb738893c3e6515722fdf497394638233f1e9407c3641d07f0
+  checksum: 7028bffce2d60f336940806525f34fbd0ec950e41bceeee006231cb7ab5eafd0539abe28aedfaf6ffcfde44102bc4b7c312a52806c7eb579469bde9bbc063e2c
   languageName: node
   linkType: hard
 
@@ -66,11 +41,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@abacus-network/helloworld@workspace:."
   dependencies:
-    "@abacus-network/app": 0.2.3
-    "@abacus-network/core": 0.2.3
-    "@abacus-network/deploy": 0.2.3
-    "@abacus-network/hardhat": 0.2.3
-    "@abacus-network/sdk": 0.2.3
+    "@abacus-network/sdk": 0.3.0-beta0
     "@nomiclabs/hardhat-ethers": ^2.0.1
     "@nomiclabs/hardhat-waffle": ^2.0.1
     "@openzeppelin/contracts-upgradeable": ^4.6.0
@@ -82,6 +53,7 @@ __metadata:
     chai: ^4.3.0
     eslint: ^8.16.0
     eslint-config-prettier: ^8.5.0
+    ethereum-waffle: ^3.4.4
     ethers: ^5.4.7
     hardhat: ^2.8.3
     hardhat-gas-reporter: ^1.0.7
@@ -96,25 +68,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@abacus-network/sdk@npm:0.2.3, @abacus-network/sdk@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@abacus-network/sdk@npm:0.2.3"
+"@abacus-network/sdk@npm:0.3.0-beta0":
+  version: 0.3.0-beta0
+  resolution: "@abacus-network/sdk@npm:0.3.0-beta0"
   dependencies:
-    "@abacus-network/core": ^0.2.3
-    "@abacus-network/utils": ^0.2.3
-    "@celo-tools/celo-ethers-wrapper": ^0.2.0
+    "@abacus-network/app": ^0.3.0-beta0
+    "@abacus-network/celo-ethers-provider": ^0.1.0
+    "@abacus-network/core": ^0.3.0-beta0
+    "@abacus-network/utils": ^0.3.0-beta0
+    "@types/debug": ^4.1.7
+    cross-fetch: ^3.1.5
+    debug: ^4.3.4
     ethers: ^5.6.8
-  checksum: d79f9c33a3b21140f583808430200777fa2e076cfea3629eb5f21b998fbe9e259520e5245d7459c368ce51c17e7cc1c2f903eb2e3706dc9dbcfad0472a169a0d
+  checksum: 393fcce4093af57054e842e479c572b8294d719777a6ff367daf3c6e5b31de0ab0e80f4412eb7e7889e4539cee4a607b1cba4462beea73df08b920dd3582fc26
   languageName: node
   linkType: hard
 
-"@abacus-network/utils@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "@abacus-network/utils@npm:0.2.3"
+"@abacus-network/utils@npm:^0.3.0-beta0":
+  version: 0.3.0-beta0
+  resolution: "@abacus-network/utils@npm:0.3.0-beta0"
   dependencies:
-    chai: ^4.3.0
     ethers: ^5.6.8
-  checksum: 5399694f2395b2e0f532f412053670a558b0eba35303dcd0e01f9a4877ff69a917569bdf7a597bc6bcb8c9ad990a0c87d73b72b03ed361d5d6fa6988fd18a344
+  checksum: 559390ef85f66b452cd292a5a8ccdad2c5a5dd5695715c29f26cba5bd7806e0e43c256e9c141a1db2dbb5b19df37280cd5f4320a1e8651af73072d11089a0f0a
   languageName: node
   linkType: hard
 
@@ -142,15 +117,6 @@ __metadata:
     chalk: ^2.0.0
     js-tokens: ^4.0.0
   checksum: 841a11aa353113bcce662b47085085a379251bf8b09054e37e1e082da1bf0d59355a556192a6b5e9ee98e8ee6f1f2831ac42510633c5e7043e3744dda2d6b9d6
-  languageName: node
-  linkType: hard
-
-"@celo-tools/celo-ethers-wrapper@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@celo-tools/celo-ethers-wrapper@npm:0.2.0"
-  peerDependencies:
-    ethers: ^5
-  checksum: 204177c8845003738a36d20ed5c1d64015c6ba95b2d01d186b709345f5cda1c09892471f47e7981bd5424ab50c13edc33cca5dfbb80ac607c7fadb6b8c16d0c2
   languageName: node
   linkType: hard
 
@@ -882,7 +848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomiclabs/hardhat-ethers@npm:^2.0.1, @nomiclabs/hardhat-ethers@npm:^2.0.5":
+"@nomiclabs/hardhat-ethers@npm:^2.0.1":
   version: 2.0.6
   resolution: "@nomiclabs/hardhat-ethers@npm:2.0.6"
   peerDependencies:
@@ -892,7 +858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomiclabs/hardhat-waffle@npm:^2.0.1, @nomiclabs/hardhat-waffle@npm:^2.0.2":
+"@nomiclabs/hardhat-waffle@npm:^2.0.1":
   version: 2.0.3
   resolution: "@nomiclabs/hardhat-waffle@npm:2.0.3"
   dependencies:
@@ -1506,22 +1472,6 @@ __metadata:
     "@types/bn.js": "*"
     "@types/underscore": "*"
   checksum: 25a78e80052cca8abe5edf15c0ae92854d00d1bec15283486a2535ab673345b0be090e39cc9a86822be17ddd812fa76cbfd869be21bb944d2faaf2922e2a836a
-  languageName: node
-  linkType: hard
-
-"@types/yargs-parser@npm:*":
-  version: 21.0.0
-  resolution: "@types/yargs-parser@npm:21.0.0"
-  checksum: b2f4c8d12ac18a567440379909127cf2cec393daffb73f246d0a25df36ea983b93b7e9e824251f959e9f928cbc7c1aab6728d0a0ff15d6145f66cec2be67d9a2
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:^17.0.10":
-  version: 17.0.10
-  resolution: "@types/yargs@npm:17.0.10"
-  dependencies:
-    "@types/yargs-parser": "*"
-  checksum: f0673cbfc08e17239dc58952a88350d6c4db04a027a28a06fbad27d87b670e909f9cd9e66f9c64cebdd5071d1096261e33454a55868395f125297e5c50992ca8
   languageName: node
   linkType: hard
 
@@ -2257,15 +2207,6 @@ __metadata:
   version: 1.11.0
   resolution: "aws4@npm:1.11.0"
   checksum: 5a00d045fd0385926d20ebebcfba5ec79d4482fe706f63c27b324d489a04c68edb0db99ed991e19eda09cb8c97dc2452059a34d97545cebf591d7a2b5a10999f
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.21.3":
-  version: 0.21.4
-  resolution: "axios@npm:0.21.4"
-  dependencies:
-    follow-redirects: ^1.14.0
-  checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
   languageName: node
   linkType: hard
 
@@ -4035,6 +3976,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-fetch@npm:^3.1.5":
+  version: 3.1.5
+  resolution: "cross-fetch@npm:3.1.5"
+  dependencies:
+    node-fetch: 2.6.7
+  checksum: f6b8c6ee3ef993ace6277fd789c71b6acf1b504fd5f5c7128df4ef2f125a429e29cd62dc8c127523f04a5f2fa4771ed80e3f3d9695617f441425045f505cf3bb
+  languageName: node
+  linkType: hard
+
 "cross-spawn@npm:^6.0.5":
   version: 6.0.5
   resolution: "cross-spawn@npm:6.0.5"
@@ -5234,7 +5184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethereum-waffle@npm:^3.2.2":
+"ethereum-waffle@npm:^3.4.4":
   version: 3.4.4
   resolution: "ethereum-waffle@npm:3.4.4"
   dependencies:
@@ -6000,7 +5950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.12.1, follow-redirects@npm:^1.14.0":
+"follow-redirects@npm:^1.12.1":
   version: 1.15.1
   resolution: "follow-redirects@npm:1.15.1"
   peerDependenciesMeta:
@@ -6711,7 +6661,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hardhat@npm:^2.8.3, hardhat@npm:^2.8.4":
+"hardhat@npm:^2.8.3":
   version: 2.9.9
   resolution: "hardhat@npm:2.9.9"
   dependencies:
@@ -9334,7 +9284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
+"node-fetch@npm:2.6.7, node-fetch@npm:^2.6.1, node-fetch@npm:^2.6.7":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
@@ -13982,13 +13932,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:^21.0.0":
-  version: 21.0.1
-  resolution: "yargs-parser@npm:21.0.1"
-  checksum: c3ea2ed12cad0377ce3096b3f138df8267edf7b1aa7d710cd502fe16af417bafe4443dd71b28158c22fcd1be5dfd0e86319597e47badf42ff83815485887323a
-  languageName: node
-  linkType: hard
-
 "yargs-unparser@npm:1.6.0":
   version: 1.6.0
   resolution: "yargs-unparser@npm:1.6.0"
@@ -14042,21 +13985,6 @@ __metadata:
     y18n: ^5.0.5
     yargs-parser: ^20.2.2
   checksum: b14afbb51e3251a204d81937c86a7e9d4bdbf9a2bcee38226c900d00f522969ab675703bee2a6f99f8e20103f608382936034e64d921b74df82b63c07c5e8f59
-  languageName: node
-  linkType: hard
-
-"yargs@npm:^17.4.1":
-  version: 17.5.1
-  resolution: "yargs@npm:17.5.1"
-  dependencies:
-    cliui: ^7.0.2
-    escalade: ^3.1.1
-    get-caller-file: ^2.0.5
-    require-directory: ^2.1.1
-    string-width: ^4.2.3
-    y18n: ^5.0.5
-    yargs-parser: ^21.0.0
-  checksum: 00d58a2c052937fa044834313f07910fd0a115dec5ee35919e857eeee3736b21a4eafa8264535800ba8bac312991ce785ecb8a51f4d2cc8c4676d865af1cfbde
   languageName: node
   linkType: hard
 

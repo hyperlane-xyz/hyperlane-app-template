@@ -1,16 +1,18 @@
-import { utils } from '@abacus-network/deploy';
-// TODO export TestCoreApp from @abacus-network/hardhat properly
-import { TestCoreApp } from '@abacus-network/hardhat/dist/src/TestCoreApp';
-// TODO export TestCoreDeploy from @abacus-network/hardhat properly
-import { TestCoreDeploy } from '@abacus-network/hardhat/dist/src/TestCoreDeploy';
-import { ChainMap, MultiProvider, TestChainNames } from '@abacus-network/sdk';
+import {
+  ChainMap,
+  getMultiProviderFromConfigAndSigner,
+  MultiProvider,
+  TestChainNames,
+  TestCoreApp,
+  TestCoreDeployer,
+} from '@abacus-network/sdk';
 import '@nomiclabs/hardhat-waffle';
 import { ethers } from 'hardhat';
 import { HelloWorldChecker } from '../deploy/check';
 import { getConfigMap, HelloWorldConfig, testConfigs } from '../deploy/config';
 import { HelloWorldDeployer } from '../deploy/deploy';
-import { HelloWorldApp } from '../sdk/app';
-import { HelloWorldContracts } from '../sdk/contracts';
+import { HelloWorldApp } from '../app/app';
+import { HelloWorldContracts } from '../app/contracts';
 
 describe('deploy', async () => {
   let multiProvider: MultiProvider<TestChainNames>;
@@ -22,12 +24,9 @@ describe('deploy', async () => {
 
   before(async () => {
     const [signer] = await ethers.getSigners();
-    multiProvider = utils.getMultiProviderFromConfigAndSigner(
-      testConfigs,
-      signer,
-    );
+    multiProvider = getMultiProviderFromConfigAndSigner(testConfigs, signer);
 
-    const coreDeployer = new TestCoreDeploy(multiProvider);
+    const coreDeployer = new TestCoreDeployer(multiProvider);
     const coreContractsMaps = await coreDeployer.deploy();
     core = new TestCoreApp(coreContractsMaps, multiProvider);
     config = core.extendWithConnectionManagers(getConfigMap(signer.address));
@@ -35,11 +34,11 @@ describe('deploy', async () => {
   });
 
   it('deploys', async () => {
-    contracts = await deployer.deploy();
+    contracts = await deployer.deploy({});
   });
 
   it('builds app', async () => {
-    contracts = await deployer.deploy();
+    contracts = await deployer.deploy({});
     app = new HelloWorldApp(contracts, multiProvider);
   });
 

@@ -20,9 +20,10 @@
     "target": "es6",
     "strict": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "resolveJsonModule": true
   },
-  "exclude": ["./node_modules/", "./dist/", "./src/types/hardhat.d.ts"],
-  "include": ["./src/"]
+  "exclude": ["./src/types/hardhat.d.ts"],
+  "include": ["./src/"],
+  "files": ["hardhat.config.ts"]
 }
