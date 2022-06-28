@@ -1,7 +1,7 @@
 {
   "name": "@abacus-network/helloworld",
   "description": "A basic skeleton of an Abacus app",
-  "version": "0.3.0-beta0",
+  "version": "0.3.0-beta1",
   "dependencies": {
     "@abacus-network/sdk": "0.3.0-beta0",
     "@openzeppelin/contracts-upgradeable": "^4.6.0",
@@ -42,7 +42,7 @@
     "Typescript"
   ],
   "license": "Apache-2.0",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "packageManager": "yarn@3.2.0",
   "repository": {
     "type": "git",
@@ -56,5 +56,5 @@
     "prettier": "prettier --write ./contracts ./src",
     "test": "hardhat test ./src/test/*"
   },
-  "types": "dist/index.d.ts"
+  "types": "dist/src/index.d.ts"
 }
