@@ -34,6 +34,11 @@ contract HelloWorld is Router {
         string message
     );
 
+    constructor() {
+        // Transfer ownership of the contract to deployer
+        _transferOwnership(msg.sender);
+    }
+
     // ============ External functions ============
 
     /**

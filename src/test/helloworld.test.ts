@@ -35,12 +35,14 @@ describe('HelloWorld', async () => {
     const coreDeployer = new TestCoreDeployer(multiProvider);
     const coreContractsMaps = await coreDeployer.deploy();
     coreApp = new TestCoreApp(coreContractsMaps, multiProvider);
-    config = coreApp.extendWithConnectionManagers(getConfigMap(signer.address));
+    config = coreApp.extendWithConnectionClientConfig(
+      getConfigMap(signer.address),
+    );
   });
 
   beforeEach(async () => {
     const helloWorld = new HelloWorldDeployer(multiProvider, config, coreApp);
-    const contracts = await helloWorld.deploy({});
+    const contracts = await helloWorld.deploy();
 
     local = contracts[localChain].router;
     remote = contracts[remoteChain].router;

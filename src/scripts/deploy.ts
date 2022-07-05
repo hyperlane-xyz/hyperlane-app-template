@@ -16,7 +16,7 @@ async function main() {
   );
 
   const core = AbacusCore.fromEnvironment('test', multiProvider);
-  const config = core.extendWithConnectionManagers(
+  const config = core.extendWithConnectionClientConfig(
     getConfigMap(signer.address),
   );
 

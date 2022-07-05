@@ -29,16 +29,18 @@ describe('deploy', async () => {
     const coreDeployer = new TestCoreDeployer(multiProvider);
     const coreContractsMaps = await coreDeployer.deploy();
     core = new TestCoreApp(coreContractsMaps, multiProvider);
-    config = core.extendWithConnectionManagers(getConfigMap(signer.address));
+    config = core.extendWithConnectionClientConfig(
+      getConfigMap(signer.address),
+    );
     deployer = new HelloWorldDeployer(multiProvider, config, core);
   });
 
   it('deploys', async () => {
-    contracts = await deployer.deploy({});
+    contracts = await deployer.deploy();
   });
 
   it('builds app', async () => {
-    contracts = await deployer.deploy({});
+    contracts = await deployer.deploy();
     app = new HelloWorldApp(contracts, multiProvider);
   });
 

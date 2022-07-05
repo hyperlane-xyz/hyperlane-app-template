@@ -27,7 +27,7 @@ async function check() {
   const app = new HelloWorldApp(contractsMap, multiProvider);
 
   const core = AbacusCore.fromEnvironment('test', multiProvider);
-  const config = core.extendWithConnectionManagers(
+  const config = core.extendWithConnectionClientConfig(
     getConfigMap(signer.address),
   );
 
