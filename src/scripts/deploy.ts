@@ -21,7 +21,7 @@ async function main() {
   );
 
   const deployer = new HelloWorldDeployer(multiProvider, config, core);
-  const chainToContracts = await deployer.deploy({});
+  const chainToContracts = await deployer.deploy();
   const addresses = serializeContracts(chainToContracts);
   console.info('===Contract Addresses===');
   console.info(JSON.stringify(addresses));
