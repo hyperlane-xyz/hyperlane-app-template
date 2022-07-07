@@ -30,7 +30,6 @@ export class HelloWorldDeployer<
 
   // Custom contract deployment logic can go here
   // If no custom logic is needed, call deployContract for the router
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async deployContracts(chain: Chain, config: HelloWorldConfig) {
     const router = await this.deployContract(chain, 'router', [
       config.abacusConnectionManager,
