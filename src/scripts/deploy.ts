@@ -9,17 +9,18 @@ import {
 } from '@abacus-network/sdk';
 
 import { prodConfigs } from '../deploy/config';
-import { HelloWorldDeployer } from '../deploy/deploy';
+import { RemoteIdentityProxyRouterDeployer } from '../deploy/RipDeployer';
 
 async function main() {
   console.info('Getting signer');
-  const signer = new Wallet('SET KEY HERE OR CREATE YOUR OWN SIGNER');
+  const signer = new Wallet('pkey');
 
   console.info('Preparing utilities');
   const chainProviders = objMap(prodConfigs, (_, config) => ({
     provider: config.provider,
     confirmations: config.confirmations,
     overrides: config.overrides,
+    signer: new Wallet('pkey', config.provider)
   }));
   const multiProvider = new MultiProvider(chainProviders);
 
@@ -28,7 +29,7 @@ async function main() {
     getChainToOwnerMap(prodConfigs, signer.address),
   );
 
-  const deployer = new HelloWorldDeployer(multiProvider, config, core);
+  const deployer = new RemoteIdentityProxyRouterDeployer(multiProvider, config, core);
   const chainToContracts = await deployer.deploy();
   const addresses = serializeContracts(chainToContracts);
   console.info('===Contract Addresses===');
