@@ -34,7 +34,7 @@ export class HelloWorldDeployer<
   // If no custom logic is needed, call deployContract for the router
   async deployContracts(chain: Chain, config: HelloWorldConfig) {
     const router = await this.deployContract(chain, 'router', [
-      config.mailbox,
+      config.connectionManager,
       config.interchainGasPaymaster,
     ]);
     return {
