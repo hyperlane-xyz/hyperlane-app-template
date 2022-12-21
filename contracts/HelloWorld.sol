@@ -37,7 +37,7 @@ contract HelloWorld is Router {
     constructor(
         address _mailbox,
         address _interchainGasPaymaster
-    ) {
+    ) initializer {
         __Router_initialize(
             _mailbox,
             _interchainGasPaymaster
