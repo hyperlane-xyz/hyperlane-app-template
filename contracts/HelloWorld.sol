@@ -35,15 +35,13 @@ contract HelloWorld is Router {
     );
 
     constructor(
-        address _abacusConnectionManager,
+        address _mailbox,
         address _interchainGasPaymaster
     ) {
-        // Transfer ownership of the contract to deployer
-        _transferOwnership(msg.sender);
-        // Set the addresses for the ACM and IGP
-        // Alternatively, this could be done later in an initialize method
-        _setAbacusConnectionManager(_abacusConnectionManager);
-        _setInterchainGasPaymaster(_interchainGasPaymaster);
+        __Router_initialize(
+            _mailbox,
+            _interchainGasPaymaster
+        );
     }
 
     // ============ External functions ============
@@ -59,8 +57,9 @@ contract HelloWorld is Router {
     {
         sent += 1;
         sentTo[_destinationDomain] += 1;
-        _dispatchWithGas(_destinationDomain, bytes(_message), msg.value);
-        emit SentHelloWorld(_localDomain(), _destinationDomain, _message);
+        // TODO: pay for gas in v2
+        _dispatch(_destinationDomain, bytes(_message));
+        emit SentHelloWorld(mailbox.localDomain(), _destinationDomain, _message);
     }
 
     // ============ Internal functions ============
@@ -81,7 +80,7 @@ contract HelloWorld is Router {
         receivedFrom[_origin] += 1;
         emit ReceivedHelloWorld(
             _origin,
-            _localDomain(),
+            mailbox.localDomain(),
             _sender,
             string(_message)
         );
