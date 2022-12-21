@@ -34,14 +34,8 @@ contract HelloWorld is Router {
         string message
     );
 
-    constructor(
-        address _mailbox,
-        address _interchainGasPaymaster
-    ) initializer {
-        __Router_initialize(
-            _mailbox,
-            _interchainGasPaymaster
-        );
+    constructor(address _mailbox, address _interchainGasPaymaster) initializer {
+        __Router_initialize(_mailbox, _interchainGasPaymaster);
     }
 
     // ============ External functions ============
@@ -59,7 +53,11 @@ contract HelloWorld is Router {
         sentTo[_destinationDomain] += 1;
         // TODO: pay for gas in v2
         _dispatch(_destinationDomain, bytes(_message));
-        emit SentHelloWorld(mailbox.localDomain(), _destinationDomain, _message);
+        emit SentHelloWorld(
+            mailbox.localDomain(),
+            _destinationDomain,
+            _message
+        );
     }
 
     // ============ Internal functions ============
