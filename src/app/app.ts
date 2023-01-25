@@ -11,6 +11,8 @@ import {
 } from '@hyperlane-xyz/sdk';
 import { debug } from '@hyperlane-xyz/utils';
 
+import { IInterchainGasPaymaster__factory } from '../types';
+
 import { HelloWorldContracts } from './contracts';
 
 type Counts = {
@@ -59,6 +61,22 @@ export class HelloWorldApp<
       tx,
     });
     return tx.wait(chainConnection.confirmations);
+  }
+
+  async quoteGasPayment<From extends Chain>(
+    from: From,
+    to: Remotes<Chain, From>,
+  ) {
+    const sender = this.getContracts(from).router;
+    const toDomain = ChainNameToDomainId[to];
+    const chainConnection = this.multiProvider.getChainConnection(from);
+
+    const igp = IInterchainGasPaymaster__factory.connect(
+      this.core.contractsMap[from].interchainGasPaymaster.address,
+      chainConnection.provider,
+    );
+    const handleGasAmount = await sender.handleGasAmounts(toDomain);
+    return igp.quoteGasPayment(toDomain, handleGasAmount);
   }
 
   async waitForMessageReceipt(
