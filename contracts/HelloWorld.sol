@@ -9,6 +9,10 @@ import {Router} from "@hyperlane-xyz/core/contracts/Router.sol";
  * @dev You can use this simple app as a starting point for your own application.
  */
 contract HelloWorld is Router {
+    // A generous upper bound on the amount of gas to use in the handle
+    // function when a message is processed. Used for paying for gas.
+    uint256 public constant HANDLE_GAS_AMOUNT = 50_000;
+
     // A counter of how many messages have been sent from this contract.
     uint256 public sent;
     // A counter of how many messages have been received by this contract.
@@ -20,10 +24,6 @@ contract HelloWorld is Router {
     // Keyed by domain, a counter of how many messages that have been received
     // by this contract from the domain.
     mapping(uint32 => uint256) public receivedFrom;
-
-    // Keyed by domain, a generous upper bound on the amount of gas to use in the
-    // handle function when a message is processed. Used for paying for gas.
-    mapping(uint32 => uint256) public handleGasAmounts;
 
     // ============ Events ============
     event SentHelloWorld(
@@ -68,7 +68,7 @@ contract HelloWorld is Router {
         _dispatchWithGas(
             _destinationDomain,
             bytes(_message),
-            handleGasAmounts[_destinationDomain],
+            HANDLE_GAS_AMOUNT,
             msg.value,
             msg.sender
         );
@@ -77,21 +77,6 @@ contract HelloWorld is Router {
             _destinationDomain,
             _message
         );
-    }
-
-    /**
-     * @notice Sets the amount of gas the recipient's handle function uses on
-     * the destination domain, which is used when paying for gas.
-     * @dev Reverts if called by a non-owner.
-     * @param _destinationDomain The destination domain,
-     * @param _handleGasAmount The handle gas amount.
-     */
-    function setHandleGasAmount(
-        uint32 _destinationDomain,
-        uint256 _handleGasAmount
-    ) external onlyOwner {
-        handleGasAmounts[_destinationDomain] = _handleGasAmount;
-        emit HandleGasAmountSet(_destinationDomain, _handleGasAmount);
     }
 
     // ============ Internal functions ============

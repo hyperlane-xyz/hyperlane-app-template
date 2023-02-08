@@ -67,9 +67,8 @@ export class HelloWorldApp<
     to: To,
   ): Promise<BigNumber> {
     const sender = this.getContracts(from).router;
-    const toDomain = ChainNameToDomainId[to];
 
-    const handleGasAmount = await sender.handleGasAmounts(toDomain);
+    const handleGasAmount = await sender.HANDLE_GAS_AMOUNT();
     const calculator = new InterchainGasCalculator(
       this.multiProvider,
       this.core,

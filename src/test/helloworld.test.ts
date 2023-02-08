@@ -27,7 +27,6 @@ describe('HelloWorld', async () => {
   const remoteChain = 'test2';
   const localDomain = ChainNameToDomainId[localChain];
   const remoteDomain = ChainNameToDomainId[remoteChain];
-  const handleGasAmount = 100_000;
 
   let signer: SignerWithAddress;
   let local: HelloWorld;
@@ -73,9 +72,7 @@ describe('HelloWorld', async () => {
     destinationDomain: number,
     igp: IInterchainGasPaymaster,
   ) {
-    const handleGasAmount = await fromRouter.handleGasAmounts(
-      destinationDomain,
-    );
+    const handleGasAmount = await fromRouter.HANDLE_GAS_AMOUNT();
     return igp.quoteGasPayment(destinationDomain, handleGasAmount);
   }
 
@@ -111,27 +108,5 @@ describe('HelloWorld', async () => {
     // The initial message has been processed.
     expect(await remote.received()).to.equal(1);
     expect(await remote.receivedFrom(localDomain)).to.equal(1);
-  });
-
-  describe('setHandleGasAmount', () => {
-    it('sets the handle gas amount', async () => {
-      expect(await local.handleGasAmounts(remoteDomain)).to.equal(0);
-
-      await expect(local.setHandleGasAmount(remoteDomain, handleGasAmount))
-        .to.emit(local, 'HandleGasAmountSet')
-        .withArgs(remoteDomain, handleGasAmount);
-
-      expect(await local.handleGasAmounts(remoteDomain)).to.equal(
-        handleGasAmount,
-      );
-    });
-
-    it('reverts if called by a non-owner', async () => {
-      const [, nonOwner] = await ethers.getSigners();
-      const localNonOwner = local.connect(nonOwner);
-      await expect(
-        localNonOwner.setHandleGasAmount(remoteDomain, handleGasAmount),
-      ).to.be.revertedWith('Ownable: caller is not the owner');
-    });
   });
 });
