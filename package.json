@@ -3,7 +3,7 @@
   "description": "A basic skeleton of an Hyperlane app",
   "version": "1.1.4",
   "dependencies": {
-    "@hyperlane-xyz/sdk": "^1.1.4",
+    "@hyperlane-xyz/sdk": "1.1.4",
     "@openzeppelin/contracts-upgradeable": "^4.8.0",
     "ethers": "^5.7.2"
   },
