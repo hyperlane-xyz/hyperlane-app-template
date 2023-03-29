@@ -3,11 +3,13 @@ import { BigNumber, ethers } from 'ethers';
 import {
   ChainMap,
   ChainName,
-  HyperlaneApp,
   HyperlaneCore,
   MultiProvider,
+  RouterApp,
 } from '@hyperlane-xyz/sdk';
 import { debug } from '@hyperlane-xyz/utils';
+
+import { HelloWorld } from '../types';
 
 import { HelloWorldContracts } from './contracts';
 
@@ -16,13 +18,17 @@ type Counts = {
   received: number;
 };
 
-export class HelloWorldApp extends HyperlaneApp<HelloWorldContracts> {
+export class HelloWorldApp extends RouterApp<HelloWorldContracts> {
   constructor(
     public readonly core: HyperlaneCore,
     contractsMap: ChainMap<HelloWorldContracts>,
     multiProvider: MultiProvider,
   ) {
     super(contractsMap, multiProvider);
+  }
+
+  router(contracts: HelloWorldContracts): HelloWorld {
+    return contracts.router;
   }
 
   async sendHelloWorld(
