@@ -3,6 +3,8 @@ import { BigNumber, ethers } from 'ethers';
 import {
   ChainMap,
   ChainName,
+  HyperlaneContracts,
+  HyperlaneContractsMap,
   HyperlaneCore,
   MultiProvider,
   RouterApp,
@@ -11,23 +13,23 @@ import { debug } from '@hyperlane-xyz/utils';
 
 import { HelloWorld } from '../types';
 
-import { HelloWorldContracts } from './contracts';
+import { HelloWorldFactories } from './contracts';
 
 type Counts = {
   sent: number;
   received: number;
 };
 
-export class HelloWorldApp extends RouterApp<HelloWorldContracts> {
+export class HelloWorldApp extends RouterApp<HelloWorldFactories> {
   constructor(
     public readonly core: HyperlaneCore,
-    contractsMap: ChainMap<HelloWorldContracts>,
+    contractsMap: HyperlaneContractsMap<HelloWorldFactories>,
     multiProvider: MultiProvider,
   ) {
     super(contractsMap, multiProvider);
   }
 
-  router(contracts: HelloWorldContracts): HelloWorld {
+  router(contracts: HyperlaneContracts<HelloWorldFactories>): HelloWorld {
     return contracts.router;
   }
 

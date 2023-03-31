@@ -5,7 +5,7 @@ import {
   HyperlaneIgp,
   MultiProvider,
   createRouterConfigMap,
-  serializeContracts,
+  serializeContractsMap,
 } from '@hyperlane-xyz/sdk';
 
 import { prodConfigs } from '../deploy/config';
@@ -29,7 +29,7 @@ async function main() {
 
   const deployer = new HelloWorldDeployer(multiProvider, config, core);
   const chainToContracts = await deployer.deploy();
-  const addresses = serializeContracts(chainToContracts);
+  const addresses = serializeContractsMap(chainToContracts);
   console.info('===Contract Addresses===');
   console.info(JSON.stringify(addresses));
 }

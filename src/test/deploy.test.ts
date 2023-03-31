@@ -3,6 +3,7 @@ import { ethers } from 'hardhat';
 
 import {
   ChainMap,
+  HyperlaneContractsMap,
   MultiProvider,
   TestCoreApp,
   TestCoreDeployer,
@@ -10,7 +11,7 @@ import {
 } from '@hyperlane-xyz/sdk';
 
 import { HelloWorldApp } from '../app/app';
-import { HelloWorldContracts } from '../app/contracts';
+import { HelloWorldFactories } from '../app/contracts';
 import { HelloWorldChecker } from '../deploy/check';
 import { HelloWorldConfig } from '../deploy/config';
 import { HelloWorldDeployer } from '../deploy/deploy';
@@ -20,7 +21,7 @@ describe('deploy', async () => {
   let core: TestCoreApp;
   let config: ChainMap<HelloWorldConfig>;
   let deployer: HelloWorldDeployer;
-  let contracts: ChainMap<HelloWorldContracts>;
+  let contracts: HyperlaneContractsMap<HelloWorldFactories>;
   let app: HelloWorldApp;
 
   before(async () => {

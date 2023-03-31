@@ -1,13 +1,7 @@
-import { HelloWorld, HelloWorld__factory } from '../types';
+import { HelloWorld__factory } from '../types';
 
-export type HelloWorldFactories = {
-  router: HelloWorld__factory;
-};
-
-export const helloWorldFactories: HelloWorldFactories = {
+export const helloWorldFactories = {
   router: new HelloWorld__factory(),
 };
 
-export type HelloWorldContracts = {
-  router: HelloWorld;
-};
+export type HelloWorldFactories = typeof helloWorldFactories;
