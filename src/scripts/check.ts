@@ -1,8 +1,8 @@
 import {
-  HyperlaneApp,
   HyperlaneCore,
   HyperlaneIgp,
   MultiProvider,
+  attachContractsMap,
   createRouterConfigMap,
 } from '@hyperlane-xyz/sdk';
 
@@ -21,15 +21,14 @@ async function check() {
   console.info('Preparing utilities');
   const multiProvider = new MultiProvider(prodConfigs);
 
-  const { contracts } = HyperlaneApp.buildContracts(
+  const contractsMap = attachContractsMap(
     deploymentAddresses,
     helloWorldFactories,
-    multiProvider,
   );
 
   const core = HyperlaneCore.fromEnvironment('testnet', multiProvider);
   const igp = HyperlaneIgp.fromEnvironment('testnet', multiProvider);
-  const app = new HelloWorldApp(core, contracts, multiProvider);
+  const app = new HelloWorldApp(core, contractsMap, multiProvider);
   const config = createRouterConfigMap(
     ownerAddress,
     core.contractsMap,
