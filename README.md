@@ -1,27 +1,5 @@
-# Hyperlane 'Hello World' App Template
+# Deprecated
 
-A basic Hyperlane application with a router contract that can dispatch messages.
+helloworld moved back into the monorepo and this repo is archived
 
-## Setup
-
-```sh
-# Install dependencies
-yarn
-
-# Build source and generate types
-yarn build
-```
-
-## Test
-
-```sh
-# Run all unit tests
-yarn test
-
-# Lint check code
-yarn lint
-```
-
-## Learn more
-
-For more information, see the [Hyperlane documentation](https://docs.hyperlane.xyz/hyperlane-docs/developers/getting-started).
+https://github.com/hyperlane-xyz/hyperlane-monorepo/tree/main/typescript/helloworld
